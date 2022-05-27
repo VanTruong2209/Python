@@ -1,5 +1,4 @@
 import datetime
-
 from django.db import models
 from sanpham.models import SanPham
 from user.models import User

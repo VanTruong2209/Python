@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 
 # Create your models here.
@@ -8,6 +9,7 @@ class LoaiSanPham(models.Model):
 class Hang(models.Model):
     id_hang = models.IntegerField(primary_key=True,null=False)
     tenhang = models.CharField(max_length=100)
+    hinhanh = models.CharField(max_length=1000,null=True)
 
 class SanPham(models.Model):
     id_sanpham = models.IntegerField(primary_key=True,null=False)
@@ -19,3 +21,4 @@ class SanPham(models.Model):
     mota = models.CharField(max_length=10000)
     hinhanh = models.CharField(max_length=1000)
     tinhtrang = models.BooleanField(default=True)
+    ngaydat = models.DateField(default=datetime.datetime.now,null=True)
