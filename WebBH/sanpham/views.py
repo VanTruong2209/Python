@@ -1,9 +1,10 @@
+from itertools import count
 from django.shortcuts import render
+from django.db.models.query import QuerySet
 from .models import *
 # Create your views here.
 def home(request):
-    list_new_sp = SanPham.objects.all()[:6]
-    # print(list_new_sp)
+    list_new_sp = SanPham.objects.all().order_by('ngaydat')[:8]
     list_brand = Hang.objects.all()
     return render(request,'home.html',{'list_new_sp':list_new_sp,'list_brand':list_brand})
 
@@ -11,7 +12,75 @@ def shop_page(request):
     list_sp = SanPham.objects.all()
     return render(request,'shop.html',{'list_sp':list_sp})
 
-def detail_product(request):
-    sp = SanPham.objects.filter(pk=1).first()
+def detail_product(request,id):
+    sp = SanPham.objects.filter(pk=id).first()
     if sp:
         return render(request,'detail-product.html',{'sanpham': sp})
+
+def list_branch(request, id):
+    list_sp = SanPham.objects.filter(hang=id)
+    return render(request,'shop.html',{'list_sp':list_sp})
+
+def list_branch_product(request, id):
+    list_sp = SanPham.objects.filter(hang=id)
+
+    list_category = LoaiSanPham.objects.all()
+    list_branch = list(Hang.objects.all())
+    dem = []
+    for i in list_branch:
+        sp = SanPham.objects.filter(hang=i).count()
+        print(sp)
+        obj = {
+            'id_hang': i.id_hang,
+            'tenhang': i.tenhang,
+            'dem' : sp
+        }
+        dem.append(obj)
+    print(dem)
+    # dem : chua hang va dem tung loai san pham
+    return render(request,'category_product.html',{'list_category':list_category,'list_branch':dem,'list_sp':list_sp})
+
+def list_category(request, id):
+    list_category = LoaiSanPham.objects.filter(pk=id).first()
+    # print(list_category)
+    list_sp = SanPham.objects.filter(loaisanpham=list_category)
+    return render(request,'shop.html',{'list_sp':list_sp})
+
+def list_category_product(request, id):
+    list_category = LoaiSanPham.objects.filter(pk=id).first()
+    # print(list_category)
+    list_sp = SanPham.objects.filter(loaisanpham=list_category)
+
+    list_category = LoaiSanPham.objects.all()
+    list_branch = list(Hang.objects.all())
+    dem = []
+    for i in list_branch:
+        sp = SanPham.objects.filter(hang=i).count()
+        print(sp)
+        obj = {
+            'id_hang': i.id_hang,
+            'tenhang': i.tenhang,
+            'dem' : sp
+        }
+        dem.append(obj)
+    print(dem)
+    # dem : chua hang va dem tung loai san pham
+    return render(request,'category_product.html',{'list_category':list_category,'list_branch':dem,'list_sp':list_sp})
+
+def category(request):
+    list_category = LoaiSanPham.objects.all()
+    list_branch = list(Hang.objects.all())
+    dem = []
+    for i in list_branch:
+        sp = SanPham.objects.filter(hang=i).count()
+        print(sp)
+        obj = {
+            'id_hang': i.id_hang,
+            'tenhang': i.tenhang,
+            'dem' : sp
+        }
+        dem.append(obj)
+    print(dem)
+    # dem : chua hang va dem tung loai san pham
+    return render(request,'category.html',{'list_category':list_category,'list_branch':dem})
+

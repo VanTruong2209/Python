@@ -7,6 +7,39 @@
 
 <!-- End mainmenu area -->
 {% extends 'base.html'%} {% load static%} {% block contentblock%}
+<div class="mainmenu-area">
+  <div class="container">
+    <div class="row">
+      <div class="navbar-header">
+        <button
+          type="button"
+          class="navbar-toggle"
+          data-toggle="collapse"
+          data-target=".navbar-collapse"
+        >
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="{% url 'sanpham:home' %}">Home</a></li>
+          <li>
+            <a href="{% url 'sanpham:shop_page' %}">Sản phẩm</a>
+          </li>
+          <!-- <li><a href="single-product.html">Single product</a></li> -->
+          <li><a href="{% url 'sanpham:category' %}">Thể loại</a></li>
+          <li><a href="checkout.html">Thanh toán</a></li>
+          <!-- <li><a href="#">Others</a></li> -->
+          <li><a href="#">Liên hệ</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="product-big-title-area">
   <div class="container">
     <div class="row">

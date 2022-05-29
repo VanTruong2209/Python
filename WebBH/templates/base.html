@@ -57,19 +57,28 @@
             <div class="user-menu">
               <ul>
                 <li>
-                  <a href="#"><i class="fa fa-user"></i> Tài khoản </a>
+                  <a href="#"><i class="fa fa-user"></i> 
+                    {% if request.session.hoten %}
+                    {{request.session.hoten}} </a>
+                    {% else %}
+                    User
+                    {% endif %}
                 </li>
                 <!-- <li><a href="#"><i class="fa fa-heart"></i> Wishlist</a></li> -->
                 <li>
-                  <a href="cart.html"><i class="fa fa-user"></i> Giỏ hàng </a>
+                  <a href="{% url 'donhangs:view_cart' %}"><i class="fa fa-user"></i> Giỏ hàng </a>
                 </li>
                 <li>
-                  <a href="checkout.html"
-                    ><i class="fa fa-user"></i> Thanh toán </a
+                  <a href="#"
+                    ><i class="fa fa-user"></i>Thanh toán</a
                   >
                 </li>
                 <li>
-                  <a href="#"><i class="fa fa-user"></i> Đăng nhập </a>
+                  {% if request.session.id_user %}
+                  <a href="{% url 'user:logout' %}"><i class="fa fa-user"></i> Đăng xuất </a>
+                  {% else %}
+                  <a href="{% url 'user:login' %}"><i class="fa fa-user"></i> Đăng nhập </a>
+                  {% endif %}
                 </li>
               </ul>
             </div>
@@ -123,7 +132,7 @@
           <div class="col-sm-6">
             <div class="logo">
               <h1>
-                <a href="index.html">e<span>Electronics</span></a>
+                <a href="{% url 'sanpham:home' %}">e<span>Electronics</span></a>
               </h1>
             </div>
           </div>
@@ -256,5 +265,6 @@
 
     <!-- Main Script -->
     <script src="{% static 'js/main.js' %}"></script>
+  
   </body>
 </html>

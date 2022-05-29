@@ -19,12 +19,11 @@
         <ul class="nav navbar-nav">
           <li><a href="{% url 'sanpham:home' %}">Home</a></li>
           <li class="active">
-            <a href="{% url 'sanpham:shop_page' %}">Shop page</a>
+            <a href="{% url 'sanpham:shop_page' %}">Sản phẩm</a>
           </li>
           <!-- <li><a href="single-product.html">Single product</a></li> -->
-          <li><a href="cart.html">Giỏ hàng</a></li>
+          <li><a href="{% url 'sanpham:category' %}">Thể loại</a></li>
           <li><a href="checkout.html">Thanh toán</a></li>
-          <li><a href="#">Thể loại</a></li>
           <!-- <li><a href="#">Others</a></li> -->
           <li><a href="#">Liên hệ</a></li>
         </ul>
@@ -51,24 +50,41 @@
     <div class="row">
       {% for item in list_sp %}
       <div class="col-md-3 col-sm-6">
-        <div class="single-shop-product">
-          <div class="product-upper">
-            <img src="{% static item.hinanh %}" alt="" />
+        <div
+          class="single-shop-product"
+          style="position: relative; height: 400px"
+        >
+          <div class="product-upper" style="height: 270px; position: relative">
+            <img
+              src="{% static item.hinhanh %}"
+              alt=""
+              style="position: absolute; top: 50%; transform: translateY(-50%)"
+            />
           </div>
-          <h2><a href="">{{item.tensanpham}}</a></h2>
-          <div class="product-carousel-price">
+          <h2>
+            <a href="{% url 'sanpham:detail_product' item.id_sanpham %}"
+              >{{item.tensanpham}}</a
+            >
+          </h2>
+          <div
+            class="product-carousel-price"
+            style="position: absolute; bottom: 12%"
+          >
             <ins>{{item.dongia}}VNĐ</ins>
             <!-- <del>$999.00</del> -->
           </div>
 
-          <div class="product-option-shop">
+          <div
+            class="product-option-shop"
+            style="position: absolute; bottom: 0%"
+          >
             <a
               class="add_to_cart_button"
               data-quantity="1"
               data-product_sku=""
               data-product_id="70"
               rel="nofollow"
-              href="/canvas/shop/?add-to-cart=70"
+              href="{% url 'donhangs:add_cart' item.id_sanpham %}"
               >Add to cart</a
             >
           </div>
