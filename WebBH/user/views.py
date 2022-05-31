@@ -1,3 +1,5 @@
+
+from click import confirm
 from django.shortcuts import redirect, render
 from .models import User
 # Create your views here.
@@ -23,4 +25,21 @@ def logout(request):
     # return render(request,'login.html')
 
 def signup(request):
-    pass
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password= request.POST.get('password')
+        email = request.POST.get('email')
+        confirm = request.POST.get('confirm')
+        hoten = request.POST.get('hoten')
+        user = User.objects.filter(username = username).first()
+        print(user)
+
+        if user is None:
+            if confirm == password:
+                print(1)
+                user = User.objects.all().order_by('-id_user').first()
+                id_new = user.id_user+1
+                User.objects.create(id_user=id_new,username=username,password=password,email=email,hoten=hoten).save()
+                return login(request)
+
+    return render(request,'register.html')

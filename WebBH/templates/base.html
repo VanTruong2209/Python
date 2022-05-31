@@ -80,6 +80,11 @@
                   <a href="{% url 'user:login' %}"><i class="fa fa-user"></i> Đăng nhập </a>
                   {% endif %}
                 </li>
+                {% if not request.session.id_user %}
+                <li>    
+                  <a href="{% url 'user:signup' %}"><i class="fa fa-user"></i> Đăng kí </a>
+                </li>
+                {% endif %}
               </ul>
             </div>
           </div>
