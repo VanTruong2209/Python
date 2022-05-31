@@ -13,7 +13,7 @@ class DonHang(models.Model):
     # donhang = models.ForeignKey(DonHang,on_delete=models.CASCADE)
     # id_donhang = models.IntegerField(primary_key=True,null=False)
     id = models.AutoField(primary_key=True)
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
     )

@@ -112,9 +112,29 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  .home {
+    background-color: #fff;
+    text-decoration: none;
+    font-size: 24px;
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    width: 200px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    border: 1px black solid;
+    border-radius: 5px;
+    color: #000000;
+    font-weight: 500;
+  }
 </style>
 
 <div class="login-page">
+  <div>
+    <a class="home" href="{% url 'sanpham:home'%}">Trang chủ</a>
+  </div>
   <div class="form">
     <form class="login-form" action="{% url 'user:login' %}" method="POST">
       {% csrf_token %}{{form}}

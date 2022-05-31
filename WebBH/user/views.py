@@ -19,4 +19,8 @@ def login(request):
 def logout(request):
     del request.session['id_user'] 
     del request.session['hoten'] 
-    return render(request,'login.html')
+    return redirect('../../home')
+    # return render(request,'login.html')
+
+def signup(request):
+    pass

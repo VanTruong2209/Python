@@ -21,6 +21,7 @@
       <div class="col-md-12">
         <div class="product-content-right">
           <div class="woocommerce">
+            {% if list_chitiet_donhang %} 
             <form
               method="post"
               action="{% url 'donhangs:update_cart' list_chitiet_donhang%}"
@@ -39,6 +40,7 @@
                 </thead>
                 <tbody>
                   <!-- item -->
+               
                   {% for item in list_chitiet_donhang %}
                   <tr class="cart_item">
                     <td class="product-remove">
@@ -62,7 +64,7 @@
                     </td>
 
                     <td class="product-name">
-                      <a href="single-product.html"
+                      <a href="{% url 'sanpham:detail_product' item.sanpham.id_sanpham %}"
                         >{{item.sanpham.tensanpham}}</a
                       >
                     </td>
@@ -93,6 +95,7 @@
                     </td>
                   </tr>
                   {% endfor %}
+                
                   <tr>
                     <td class="actions" colspan="6">
                       <input
@@ -101,21 +104,28 @@
                         name="update_cart"
                         class="button"
                       />
-                      <input
-                        value="Proceed to Checkout"
-                        name="proceed"
-                        class="checkout-button button alt wc-forward"
-                      />
+                      
                     </td>
                   </tr>
                 </tbody>
               </table>
             </form>
-
-            <div class="cart-collaterals">
-              <div class="cart_totals">
+            {% else %}
+            <h2 style="text-align:center">Không có sản phẩm</h2>
+            {% endif %}
+        
+              <div
+                class="cart_totals"
+                style="
+                  float: none !important;
+                  margin-left: auto;
+                  margin-right: auto;
+                "
+              >
+              {% if list_chitiet_donhang %}
                 <h2>Cart Totals</h2>
-
+            <form method="POST" action="{% url 'donhangs:thanhtoan' donhang.id %}">
+              {% csrf_token %}{{form}}
                 <table cellspacing="0">
                   <tbody>
                     <tr class="cart-subtotal">
@@ -136,9 +146,18 @@
                     </tr>
                   </tbody>
                 </table>
+                <input
+                  style="display: block;margin-left: auto;margin-right: auto;margin-top: 30px;"
+                  type="submit"
+                  value="Proceed to Checkout"
+                  name="proceed"
+                  class="checkout-button button alt wc-forward"
+                />
               </div>
+            </form>
+              {% endif %}
+              <!-- <form method="post" action="#" class="shipping_calculator">
 
-              <form method="post" action="#" class="shipping_calculator">
                 <h2>
                   <a
                     class="shipping-calculator-button"
@@ -202,7 +221,7 @@
                     </button>
                   </p>
                 </section>
-              </form>
+              </form> -->
             </div>
           </div>
         </div>
