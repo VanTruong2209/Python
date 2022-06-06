@@ -2,6 +2,7 @@
 from click import confirm
 from django.shortcuts import redirect, render
 from .models import User
+from .forms import UserForm
 # Create your views here.
 def login(request):
     if request.method == 'POST':
@@ -43,3 +44,25 @@ def signup(request):
                 return login(request)
 
     return render(request,'register.html')
+
+def update_profile(request,id):
+    user = User.objects.filter(pk = id).first()
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password= request.POST.get('password')
+        confirm = request.POST.get('confirm')
+        email = request.POST.get('email')
+        hoten = request.POST.get('hoten')
+        gioitinh = request.POST.get('gioitinh')
+        dienthoai = request.POST.get('dienthoai')
+        diachi = request.POST.get('diachi')
+        # form = UserForm(request.POST)
+        # print(form)
+        if confirm != password: 
+            return render(request,'update_profile.html',{'user':user})
+        user_update = {'id_user' : id, 'username' : username, 'password' : password , 'email' : email, 'hoten':hoten, 'gioitinh' : gioitinh, 'dienthoai' : dienthoai, 'diachi': diachi, 'quyen' : False}
+        form = UserForm(user_update,instance=user)
+        if form.is_valid():
+            form.save()
+        return redirect('../../home')
+    return render(request,'update_profile.html',{'user':user})
