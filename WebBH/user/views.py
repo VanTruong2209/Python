@@ -14,15 +14,15 @@ def login(request):
             request.session['hoten'] = user.hoten
 
             # return render(request,'home.html')
-            return redirect('../../home/')
+            return redirect('../../')
         except:
-            return render(request,'login.html')
+            return render(request,'store/login.html')
     return render(request,'store/login.html')
 
 def logout(request):
     del request.session['id_user'] 
     del request.session['hoten'] 
-    return redirect('../../home')
+    return redirect('../../')
     # return render(request,'login.html')
 
 def signup(request):

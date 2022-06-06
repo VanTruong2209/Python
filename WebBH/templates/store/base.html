@@ -70,11 +70,7 @@
                 <li>
                   <a href="{% url 'donhangs:view_cart' %}"><i class="fa fa-user"></i> Giỏ hàng </a>
                 </li>
-                <!-- <li>
-                  <a href="#"
-                    ><i class="fa fa-user"></i>Thanh toán</a
-                  >
-                </li> -->
+              
                 <li>
                   {% if request.session.id_user %}
                   <a href="{% url 'user:logout' %}"><i class="fa fa-user"></i> Đăng xuất </a>
