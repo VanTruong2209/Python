@@ -11,7 +11,7 @@ def view_cart(request):
         id_user = request.session['id_user']
     except:
         # print(2)
-        return render(request,'login.html')
+        return render(request,'store/login.html')
     user = User.objects.filter(pk = id_user).first()
     donhang_user = DonHang.objects.filter(user = user, trangthai = False).first()
 
@@ -32,9 +32,9 @@ def view_cart(request):
         
         request.session['id_donhang'] = donhang_user.id
         # print(1)
-        return render(request,'cart.html',obj)
+        return render(request,'store/cart.html',obj)
     else:
-        return render(request,'cart.html',{})
+        return render(request,'store/cart.html',{})
     
 
 

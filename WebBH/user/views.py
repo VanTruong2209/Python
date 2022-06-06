@@ -17,7 +17,7 @@ def login(request):
             return redirect('../../home/')
         except:
             return render(request,'login.html')
-    return render(request,'login.html')
+    return render(request,'store/login.html')
 
 def logout(request):
     del request.session['id_user'] 
@@ -43,7 +43,7 @@ def signup(request):
                 User.objects.create(id_user=id_new,username=username,password=password,email=email,hoten=hoten).save()
                 return login(request)
 
-    return render(request,'register.html')
+    return render(request,'store/register.html')
 
 def update_profile(request,id):
     user = User.objects.filter(pk = id).first()
@@ -65,4 +65,4 @@ def update_profile(request,id):
         if form.is_valid():
             form.save()
         return redirect('../../home')
-    return render(request,'update_profile.html',{'user':user})
+    return render(request,'store/update_profile.html',{'user':user})
