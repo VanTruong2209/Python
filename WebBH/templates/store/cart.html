@@ -91,7 +91,7 @@
                     </td>
 
                     <td class="product-subtotal">
-                      <span class="amount">{{item.thanhtien}}</span>
+                      <span class="amount">{{item.thanhtien|intcomma}} VNĐ</span>
                     </td>
                   </tr>
                   {% endfor %}
@@ -123,27 +123,22 @@
                 "
               >
               {% if list_chitiet_donhang %}
-                <h2>Cart Totals</h2>
+                <!-- <h2>Cart Totals</h2> -->
             <form method="POST" action="{% url 'donhangs:thanhtoan' donhang.id %}">
               {% csrf_token %}{{form}}
                 <table cellspacing="0">
                   <tbody>
                     <tr class="cart-subtotal">
-                      <th>Cart Subtotal</th>
-                      <td><span class="amount">{{donhang.tongtien}}</span></td>
+                      <th>Tổng tiền</th>
+                      <td><span class="amount">{{donhang.tongtien|intcomma}} VNĐ</span></td>
                     </tr>
 
                     <tr class="shipping">
-                      <th>Shipping and Handling</th>
+                      <th>Shipping</th>
                       <td>Free Shipping</td>
                     </tr>
 
-                    <tr class="order-total">
-                      <th>Order Total</th>
-                      <td>
-                        <strong><span class="amount">£15.00</span></strong>
-                      </td>
-                    </tr>
+                    
                   </tbody>
                 </table>
                 <input

@@ -101,6 +101,11 @@
                     ><i class="fa fa-user"></i>Thanh toán</a
                   >
                 </li> -->
+                {% if request.session.id_user %}
+                <li>
+                  <a href="{% url 'donhangs:history' %}"><i class="fa fa-user"></i>Lịch sử giao dịch </a>
+                </li>
+                {% endif %}
                 <li>
                   {% if request.session.id_user %}
                   <a href="{% url 'user:logout' %}"><i class="fa fa-user"></i> Đăng xuất </a>
