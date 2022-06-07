@@ -4,7 +4,7 @@ from django.db.models.query import QuerySet
 from .models import *
 # Create your views here.
 def home(request):
-    list_new_sp = SanPham.objects.all().order_by('ngaydat')[:8]
+    list_new_sp = SanPham.objects.all().order_by('-ngaydat')[:8]
     list_brand = Hang.objects.all()
     return render(request,'store/home.html',{'list_new_sp':list_new_sp,'list_brand':list_brand})
 
@@ -29,14 +29,14 @@ def list_branch_product(request, id):
     dem = []
     for i in list_branch:
         sp = SanPham.objects.filter(hang=i).count()
-        print(sp)
+        # print(sp)
         obj = {
             'id_hang': i.id_hang,
             'tenhang': i.tenhang,
             'dem' : sp
         }
         dem.append(obj)
-    print(dem)
+    # print(dem)
     # dem : chua hang va dem tung loai san pham
     return render(request,'store/category_product.html',{'list_category':list_category,'list_branch':dem,'list_sp':list_sp})
 
@@ -56,14 +56,14 @@ def list_category_product(request, id):
     dem = []
     for i in list_branch:
         sp = SanPham.objects.filter(hang=i).count()
-        print(sp)
+        # print(sp)
         obj = {
             'id_hang': i.id_hang,
             'tenhang': i.tenhang,
             'dem' : sp
         }
         dem.append(obj)
-    print(dem)
+    # print(dem)
     # dem : chua hang va dem tung loai san pham
     return render(request,'store/category_product.html',{'list_category':list_category,'list_branch':dem,'list_sp':list_sp})
 
@@ -73,14 +73,14 @@ def category(request):
     dem = []
     for i in list_branch:
         sp = SanPham.objects.filter(hang=i).count()
-        print(sp)
+        # print(sp)
         obj = {
             'id_hang': i.id_hang,
             'tenhang': i.tenhang,
             'dem' : sp
         }
         dem.append(obj)
-    print(dem)
+    # print(dem)
     # dem : chua hang va dem tung loai san pham
     return render(request,'store/category.html',{'list_category':list_category,'list_branch':dem})
 

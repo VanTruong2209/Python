@@ -70,7 +70,12 @@
                 <li>
                   <a href="{% url 'donhangs:view_cart' %}"><i class="fa fa-user"></i> Giỏ hàng </a>
                 </li>
-              
+                <li>
+                  {% if request.session.id_user %}
+                <li>
+                  <a href="{% url 'donhangs:history' %}"><i class="fa fa-user"></i>Lịch sử giao dịch </a>
+                </li>
+                {% endif %}
                 <li>
                   {% if request.session.id_user %}
                   <a href="{% url 'user:logout' %}"><i class="fa fa-user"></i> Đăng xuất </a>
@@ -78,6 +83,8 @@
                   <a href="{% url 'user:login' %}"><i class="fa fa-user"></i> Đăng nhập </a>
                   {% endif %}
                 </li>
+
+
                 {% if not request.session.id_user %}
                 <li>    
                   <a href="{% url 'user:signup' %}"><i class="fa fa-user"></i> Đăng kí </a>

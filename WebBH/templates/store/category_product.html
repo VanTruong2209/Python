@@ -4,17 +4,12 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
-{% extends 'store/base.html'%} {% load static %} {%block contentblock%}
+{% extends 'store/base.html'%} {% load static %} {% load humanize %} {%block contentblock%}
 <div class="mainmenu-area">
   <div class="container">
     <div class="row">
       <div class="navbar-header">
-        <button
-          type="button"
-          class="navbar-toggle"
-          data-toggle="collapse"
-          data-target=".navbar-collapse"
-        >
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -66,11 +61,7 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h4 class="panel-title">
-                  <a
-                    href="{% url 'sanpham:list_category_product' item.id_loaisanpham %}"
-                  >
-                    {{item.tenloaisanpham}}
-                  </a>
+                  <a href="{% url 'sanpham:list_category_product' item.id_loaisanpham %}"> {{item.tenloaisanpham}} </a>
                 </h4>
               </div>
             </div>
@@ -103,41 +94,23 @@
           <div class="row">
             {% for item in list_sp %}
             <div class="col-md-3 col-sm-6">
-              <div
-                class="single-shop-product"
-                style="position: relative; height: 400px"
-              >
-                <div
-                  class="product-upper"
-                  style="height: 270px; position: relative"
-                >
+              <div class="single-shop-product" style="position: relative; height: 400px">
+                <div class="product-upper" style="height: 270px; position: relative">
                   <img
                     src="{% static item.hinhanh %}"
                     alt=""
-                    style="
-                      position: absolute;
-                      top: 50%;
-                      transform: translateY(-50%);
-                    "
+                    style="position: absolute; top: 50%; transform: translateY(-50%)"
                   />
                 </div>
                 <h2>
-                  <a href="{% url 'sanpham:detail_product' item.id_sanpham %}"
-                    >{{item.tensanpham}}</a
-                  >
+                  <a href="{% url 'sanpham:detail_product' item.id_sanpham %}">{{item.tensanpham}}</a>
                 </h2>
-                <div
-                  class="product-carousel-price"
-                  style="position: absolute; bottom: 12%"
-                >
-                  <ins>{{item.dongia}}VNĐ</ins>
+                <div class="product-carousel-price" style="position: absolute; bottom: 12%">
+                  <ins>{{item.dongia|intcomma}}VNĐ</ins>
                   <!-- <del>$999.00</del> -->
                 </div>
 
-                <div
-                  class="product-option-shop"
-                  style="position: absolute; bottom: 0%"
-                >
+                <div class="product-option-shop" style="position: absolute; bottom: 0%">
                   <a
                     class="add_to_cart_button"
                     data-quantity="1"
