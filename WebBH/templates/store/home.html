@@ -1,14 +1,9 @@
-{% extends 'base.html'%} {% load static%} {% block contentblock%}
+{% extends 'store/base.html'%} {% load static%} {% load humanize %} {%block contentblock%}
 <div class="mainmenu-area">
   <div class="container">
     <div class="row">
       <div class="navbar-header">
-        <button
-          type="button"
-          class="navbar-toggle"
-          data-toggle="collapse"
-          data-target=".navbar-collapse"
-        >
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -21,7 +16,7 @@
           <li><a href="{% url 'sanpham:shop_page' %}">Sản phẩm</a></li>
           <!-- <li><a href="single-product.html">Single product</a></li> -->
           <li><a href="{% url 'sanpham:category' %}">Thể loại</a></li>
-          <li><a href="checkout.html">Thanh toán</a></li>
+
           <!-- <li><a href="#">Others</a></li> -->
           <li><a href="#">Liên hệ</a></li>
         </ul>
@@ -31,21 +26,13 @@
 </div>
 <div class="slider-area">
   <div class="zigzag-bottom"></div>
-  <div
-    id="slide-list"
-    class="carousel carousel-fade slide"
-    data-ride="carousel"
-  >
+  <div id="slide-list" class="carousel carousel-fade slide" data-ride="carousel">
     <div class="slide-bulletz">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
             <ol class="carousel-indicators slide-indicators">
-              <li
-                data-target="#slide-list"
-                data-slide-to="0"
-                class="active"
-              ></li>
+              <li data-target="#slide-list" data-slide-to="0" class="active"></li>
               <li data-target="#slide-list" data-slide-to="1"></li>
               <li data-target="#slide-list" data-slide-to="2"></li>
             </ol>
@@ -58,11 +45,7 @@
       <div class="item active">
         <div class="single-slide">
           <div class="slide-bg slide-one">
-            <img
-              src="{% static 'img/slide-1.jpg' %}"
-              alt=""
-              style="display: block; width: 100%"
-            />
+            <img src="{% static 'img/slide-1.jpg' %}" alt="" style="display: block; width: 100%" />
           </div>
           <div class="slide-text-wrapper">
             <div class="slide-text">
@@ -94,11 +77,7 @@
       <div class="item">
         <div class="single-slide">
           <div class="slide-bg slide-two">
-            <img
-              src="{% static 'img/slide-2.jpg' %}"
-              alt=""
-              style="display: block; width: 100%"
-            />
+            <img src="{% static 'img/slide-2.jpg' %}" alt="" style="display: block; width: 100%" />
           </div>
           <div class="slide-text-wrapper">
             <div class="slide-text">
@@ -126,11 +105,7 @@
       <div class="item">
         <div class="single-slide">
           <div class="slide-bg slide-three">
-            <img
-              src="{% static 'img/slide-3.jpg' %}"
-              alt=""
-              style="display: block; width: 100%"
-            />
+            <img src="{% static 'img/slide-3.jpg' %}" alt="" style="display: block; width: 100%" />
           </div>
           <div class="slide-text-wrapper">
             <div class="slide-text">
@@ -208,48 +183,29 @@
             <!-- 1 san pham -->
             {% for item in list_new_sp %}
 
-            <div
-              class="single-product"
-              style="position: relative; height: 400px"
-            >
-              <div
-                class="product-f-image"
-                style="height: 300px !important; position: relative"
-              >
+            <div class="single-product" style="position: relative; height: 400px">
+              <div class="product-f-image" style="height: 300px !important; position: relative">
                 <img
                   src="{% static item.hinhanh %}"
                   alt=""
-                  style="
-                    position: absolute;
-                    top: 50%;
-                    transform: translateY(-50%);
-                  "
+                  style="position: absolute; top: 50%; transform: translateY(-50%)"
                 />
                 <div class="product-hover">
-                  <a
-                    class="add-to-cart-link"
-                    href="{% url 'donhangs:add_cart' item.id_sanpham %}"
+                  <a class="add-to-cart-link" href="{% url 'donhangs:add_cart' item.id_sanpham %}"
                     ><i class="fa fa-shopping-cart"></i> Thêm giỏ hàng</a
                   >
-                  <a
-                    href="{% url 'sanpham:detail_product' item.id_sanpham %}"
-                    class="view-details-link"
+                  <a href="{% url 'sanpham:detail_product' item.id_sanpham %}" class="view-details-link"
                     ><i class="fa fa-link"></i>Chi tiết
                   </a>
                 </div>
               </div>
 
               <h2>
-                <a href="single-product.html" style="height: 10px"
-                  >{{item.tensanpham}}</a
-                >
+                <a href="single-product.html" style="height: 10px">{{item.tensanpham}}</a>
               </h2>
 
-              <div
-                class="product-carousel-price"
-                style="position: absolute; bottom: 0%"
-              >
-                <ins>{{item.dongia}} VNĐ</ins>
+              <div class="product-carousel-price" style="position: absolute; bottom: 0%">
+                <ins>{{item.dongia|intcomma }} VNĐ</ins>
                 <!-- <del>$800.00</del> -->
               </div>
             </div>
@@ -272,10 +228,7 @@
           <div class="brand-list">
             {% for item in list_brand%}
             <a href="{% url 'sanpham:list_branch' item.id_hang %}"
-              ><img
-                src="{% static item.hinhanh %}"
-                alt=""
-                style="height: 80px; width: 200px"
+              ><img src="{% static item.hinhanh %}" alt="" style="height: 80px; width: 200px"
             /></a>
 
             {% endfor %}

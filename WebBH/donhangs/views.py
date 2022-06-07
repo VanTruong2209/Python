@@ -1,6 +1,7 @@
 
 from django.shortcuts import redirect, render
 from pandas import period_range
+from requests import session
 from .models import *
 from user.models import *
 from .forms import *
@@ -11,7 +12,7 @@ def view_cart(request):
         id_user = request.session['id_user']
     except:
         # print(2)
-        return render(request,'login.html')
+        return render(request,'store/login.html')
     user = User.objects.filter(pk = id_user).first()
     donhang_user = DonHang.objects.filter(user = user, trangthai = False).first()
 
@@ -32,9 +33,9 @@ def view_cart(request):
         
         request.session['id_donhang'] = donhang_user.id
         # print(1)
-        return render(request,'cart.html',obj)
+        return render(request,'store/cart.html',obj)
     else:
-        return render(request,'cart.html',{})
+        return render(request,'store/cart.html',{})
     
 
 
@@ -68,6 +69,35 @@ def add_cart(request,id):
         request.session['id_donhang'] = donhang.id
     return view_cart(request)
     
+def add_cart_num(request,id):
+    try:
+        id_user = request.session['id_user']
+    except:
+        return redirect('../../../user/login')
+    sp = SanPham.objects.filter(pk=id).first()
+    user = User.objects.get(pk = id_user)
+    donhang_user = DonHang.objects.filter(user=user,trangthai=False).first()
+    # thêm vào đơn hàng đó
+    if donhang_user:
+        chitiet = ChiTietDonHang.objects.filter(donhang=donhang_user,sanpham = sp).first()
+        # Ktr tốn tại chi tiết thì tăng thêm số lượng
+        if chitiet:
+            chitiet.soluong+=int(request.POST.get('soluong'))
+            chitiet.save()
+        else:
+            ChiTietDonHang(donhang=donhang_user,sanpham=sp,soluong=int(request.POST.get('soluong'))).save()
+        request.session['id_donhang'] = donhang_user.id
+        
+    else:
+        print(user)
+        donhang = DonHang.objects.create(user = user)
+        donhang.save()
+        chitiet = ChiTietDonHang(donhang=donhang,sanpham=sp,soluong=1)
+        chitiet.save()
+        print(1)
+        request.session['id_donhang'] = donhang.id
+    return view_cart(request)
+
 
 def update_cart(request, list_id):
     list_chitiet=[]
@@ -119,3 +149,14 @@ def thanhtoan(request, id_donhang):
     donhang.trangthai = 'True'
     donhang.save()
     return view_cart(request)
+
+def history(request):
+    id = request.session['id_user']
+    user = User.objects.get(pk=id)
+    donhang = DonHang.objects.filter(user=user).order_by('trangthai')
+    return render(request,'store/history.html',{'listorder':donhang})
+
+def chitiet(request,id):
+    donhang = DonHang.objects.filter(id= id).first()
+    list = ChiTietDonHang.objects.filter(donhang=donhang)
+    return render(request,'store/listDetail.html',{'list':list})
