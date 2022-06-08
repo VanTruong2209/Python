@@ -14,8 +14,12 @@ def shop_page(request):
 
 def detail_product(request,id):
     sp = SanPham.objects.filter(pk=id).first()
+    danhgia = DanhGia.objects.filter(sanpham=sp)[:3]
+
     if sp:
-        return render(request,'store/detail-product.html',{'sanpham': sp})
+        return render(request,'store/detail-product.html',{'sanpham': sp,'danhgia':danhgia})
+
+    
 
 def list_branch(request, id):
     list_sp = SanPham.objects.filter(hang=id)
@@ -84,3 +88,18 @@ def category(request):
     # dem : chua hang va dem tung loai san pham
     return render(request,'store/category.html',{'list_category':list_category,'list_branch':dem})
 
+def add_review(request,id):
+    sp = SanPham.objects.filter(pk=id).first()
+    user = User.objects.filter(pk=request.session['id_user']).first()
+    if request.method == "POST":
+        print(1)
+
+        noidung = request.POST.get('review')
+        print(noidung)
+        print(2)
+
+        ngaydat = datetime.datetime.now()
+        DanhGia.objects.create(sanpham = sp, user = user, noidung = noidung,ngaydat=ngaydat).save()
+        return detail_product(request,id)
+    else:
+        return detail_product(request,id)

@@ -113,15 +113,32 @@
                     <div role="tabpanel" class="tab-pane fade" id="profile">
                       <h2>Đánh giá</h2>
                       <div class="submit-review">
-                        <p>
-                          <label for="name">Tên</label>
-                          <input name="name" type="text" />
-                        </p>
-                        <p>
-                          <label for="email">Email</label>
-                          <input name="email" type="email" />
-                        </p>
-                        <div class="rating-chooser">
+                        <!-- item -->
+                        {% for i in danhgia %}
+                        <div style="border-bottom: 2px solid #1abc9c;margin-bottom: 20px;">
+                          <div>
+                            
+                            {% if user.image %}
+                            <img
+                              src="{{user.image.url}}"
+                              style="height: 50px; width: 50px; border-radius: 50%; display: inline-block"
+
+                            />
+                            {%else%}
+                            <img
+                              src=""
+                              alt="{{user.hoten}}"
+                            />
+                            {%endif%}
+
+                            <p style="display: inline-block; width: 100px; margin-left: 20px; font-weight: 700">
+                              {{i.user.hoten}}
+                            </p>
+                          </div>
+                          <p style="margin-left: 80px">{{i.noidung}}</p>
+                        </div>
+                        {%endfor%}
+                        <!-- <div class="rating-chooser">
                           <p>Đánh giá</p>
 
                           <div class="rating-wrap-post">
@@ -131,13 +148,16 @@
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                           </div>
+                        </div> -->
+                        <form action="{% url 'sanpham:add_review' sanpham.id_sanpham%}" method ="POST">
+                          {% csrf_token %}{{form}}
+                          <p style="margin-top: 15px">
+                            <label for="review">Góp ý</label>
+                            <textarea name="review" id="" cols="30" rows="10"></textarea>
+                          </pstyle=margin-bottom:>
+                          <p><input type="submit" value="Submit" /></p>
+                        </form>
                         </div>
-                        <p>
-                          <label for="review">Góp ý</label>
-                          <textarea name="review" id="" cols="30" rows="10"></textarea>
-                        </p>
-                        <p><input type="submit" value="Submit" /></p>
-                      </div>
                     </div>
                   </div>
                 </div>
