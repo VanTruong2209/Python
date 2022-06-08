@@ -200,14 +200,27 @@
           <div class="card-body">
             <div class="account-settings">
               <div class="user-profile">
-                <div class="user-avatar">
+                 <div class="user-avatar">
+                   {% if user.image %}
                   <img
-                    src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                    alt="Maxwell Admin"
+                    src="{{user.image.url}}"
+                    style="height: 180px; width:180px"
                   />
+                  {%else%}
+                  <img
+                    src=""
+                    alt="{{user.hoten}}"
+                  />
+                  {%endif%}
+
                 </div>
-                <h5 class="user-name">Yuki Hayashi</h5>
-                <h6 class="user-email">yuki@Maxwell.com</h6>
+                <h5 class="user-name">{{user.hoten}}</h5>
+              
+                <form method = "post" action="{% url 'user:avatarView'%}" enctype="multipart/form-data">
+                  {% csrf_token %}   {{ form1.as_p }}
+                  <!-- <input type="file" id="myfile" name="myfile" style="margin-top:20px;margin-bottom:20px" > -->
+                  <button type="submit" style="height: 30px; font-size:14px; line-height: 10px; "> Upload </button>
+              </form>
               </div>
               <div class="about">
                 <h5>About</h5>

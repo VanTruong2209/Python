@@ -2,7 +2,7 @@
 from click import confirm
 from django.shortcuts import redirect, render
 from .models import User
-from .forms import UserForm
+from .forms import *
 # Create your views here.
 def login(request):
     if request.method == 'POST':
@@ -65,4 +65,20 @@ def update_profile(request,id):
         if form.is_valid():
             form.save()
         return redirect('../../home')
-    return render(request,'store/update_profile.html',{'user':user})
+    form = UserImageForm()
+    return render(request,'store/update_profile.html',{'user':user,'form1':form})
+
+def avatarView(request):
+    id_user = request.session['id_user']
+    # print(id_user)
+    if request.method == "POST":
+        user = User.objects.get(pk=id_user)
+        # BUG
+        # Chưa add vào folder
+        form = UserImageForm(request.POST,request.FILES,instance=user)
+        if form.is_valid():
+            print(1)
+            form.save()
+        print(user.image.url)
+        return redirect('../../../')
+    
