@@ -118,24 +118,25 @@
                         <div style="border-bottom: 2px solid #1abc9c;margin-bottom: 20px;">
                           <div>
                             
-                            {% if user.image %}
+                            {% if i.user.image %}
                             <img
-                              src="{{user.image.url}}"
+                              src="{{i.user.image.url}}"
                               style="height: 50px; width: 50px; border-radius: 50%; display: inline-block"
 
                             />
                             {%else%}
                             <img
                               src=""
-                              alt="{{user.hoten}}"
+                              alt="{{i.user.hoten}}"
                             />
                             {%endif%}
 
-                            <p style="display: inline-block; width: 100px; margin-left: 20px; font-weight: 700">
+                            <p style="display: inline-block; width: 200px; margin-left: 20px; font-weight: 700; font-size: 16px;">
                               {{i.user.hoten}}
                             </p>
+                            <p style="display:inline-block; float:right;margin-top:8px ">{{i.ngaydat}}</p>
                           </div>
-                          <p style="margin-left: 80px">{{i.noidung}}</p>
+                          <p style="margin-left: 74px">{{i.noidung}}</p>
                         </div>
                         {%endfor%}
                         <!-- <div class="rating-chooser">

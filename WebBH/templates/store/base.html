@@ -68,7 +68,7 @@
                 </li>
                 <!-- <li><a href="#"><i class="fa fa-heart"></i> Wishlist</a></li> -->
                 <li>
-                  <a href="{% url 'donhangs:view_cart' %}"><i class="fa fa-user"></i> Giỏ hàng </a>
+                  <a href="{% url 'donhangs:view_cart' %}"><i class="fa fa-cart-arrow-down"></i> Giỏ hàng </a>
                 </li>
                 <li>
                   {% if request.session.id_user %}
@@ -78,16 +78,16 @@
                 {% endif %}
                 <li>
                   {% if request.session.id_user %}
-                  <a href="{% url 'user:logout' %}"><i class="fa fa-user"></i> Đăng xuất </a>
+                  <a href="{% url 'user:logout' %}"><i class="fa fa-sign-out"></i> Đăng xuất </a>
                   {% else %}
-                  <a href="{% url 'user:login' %}"><i class="fa fa-user"></i> Đăng nhập </a>
+                  <a href="{% url 'user:login' %}"><i class="fa fa-sign-in"></i> Đăng nhập </a>
                   {% endif %}
                 </li>
 
 
                 {% if not request.session.id_user %}
                 <li>    
-                  <a href="{% url 'user:signup' %}"><i class="fa fa-user"></i> Đăng kí </a>
+                  <a href="{% url 'user:signup' %}"><i class="fa fa-user-plus"></i> Đăng kí </a>
                 </li>
                 {% endif %}
               </ul>
@@ -139,15 +139,21 @@
     <div class="site-branding-area">
       <div class="container">
         <div class="row">
-          <div class="col-sm-6">
+          <div class="col-sm-4">
             <div class="logo">
               <h1>
                 <a href="{% url 'sanpham:home' %}">e<span>Electronics</span></a>
               </h1>
             </div>
           </div>
-
-          <div class="col-sm-6">
+          <div  class="col-sm-4" style="margin-top:40px" >
+            <div>
+              <input type="text" placeholder="Tìm kiếm ..." style="width:100%;margin-left:30px">
+              <!-- <button><i class=""></i></button> -->
+            </div>
+          </div>
+          <div class="col-sm-3">
+            
             <div class="shopping-item">
               <a style="margin-left: 15px;" href="{% url 'donhangs:view_cart' %}"
                 >Giỏ hàng <i class="fa fa-shopping-cart"></i>
