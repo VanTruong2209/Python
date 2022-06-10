@@ -147,10 +147,12 @@
             </div>
           </div>
           <div  class="col-sm-4" style="margin-top:40px" >
-            <div>
-              <input type="text" placeholder="Tìm kiếm ..." style="width:100%;margin-left:30px">
-              <!-- <button><i class=""></i></button> -->
-            </div>
+            <form action="{% url 'sanpham:search'%}" method="post">
+                {% csrf_token %} {{form}}
+              <div>
+                <input name="noidung" type="text" placeholder="Tìm kiếm ..." style="width:100%;margin-left:30px;" ><button style="position:absolute; right: 0%;top:25%; border: none;background-color: transparent;"><i class="fa fa-search" ></i> </button>
+              </div>
+            </form>
           </div>
           <div class="col-sm-3">
             

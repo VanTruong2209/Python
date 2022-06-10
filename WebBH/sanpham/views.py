@@ -2,6 +2,7 @@ from itertools import count
 from django.shortcuts import render
 from django.db.models.query import QuerySet
 from .models import *
+from django.core.paginator import Paginator
 # Create your views here.
 def home(request):
     list_new_sp = SanPham.objects.all().order_by('-ngaydat')[:8]
@@ -10,7 +11,13 @@ def home(request):
 
 def shop_page(request):
     list_sp = SanPham.objects.all()
-    return render(request,'store/shop.html',{'list_sp':list_sp})
+    # mỗi trang 8sp
+    paginator = Paginator(list_sp, 8)
+    
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    # return render(request, 'list.html', {'page_obj': page_obj})
+    return render(request,'store/shop.html',{'list_sp':page_obj})
 
 def detail_product(request,id):
     sp = SanPham.objects.filter(pk=id).first()
@@ -103,3 +110,20 @@ def add_review(request,id):
         return detail_product(request,id)
     else:
         return detail_product(request,id)
+
+def search(request):
+    noidung = str(request.POST.get('noidung')).lower()
+    list_sp = SanPham.objects.all()
+    list_sp = list(list_sp)
+    list_name =[]
+    list_sp_result=[]
+    for i in list_sp:
+        list_name.append([i.tensanpham.lower(),i])
+    for i in list_name: 
+        if noidung in i[0]:
+            list_sp_result.append(i[1])
+    print(list_sp_result)
+    paginator = Paginator(list_sp_result, 8)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request,'store/shop.html',{'list_sp':page_obj})

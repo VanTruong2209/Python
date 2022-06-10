@@ -160,3 +160,4 @@ def chitiet(request,id):
     donhang = DonHang.objects.filter(id= id).first()
     list = ChiTietDonHang.objects.filter(donhang=donhang)
     return render(request,'store/listDetail.html',{'list':list})
+
