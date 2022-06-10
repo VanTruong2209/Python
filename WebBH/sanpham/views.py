@@ -1,5 +1,5 @@
 from itertools import count
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.db.models.query import QuerySet
 from .models import *
 from django.core.paginator import Paginator
@@ -23,8 +23,31 @@ def detail_product(request,id):
     sp = SanPham.objects.filter(pk=id).first()
     danhgia = DanhGia.objects.filter(sanpham=sp)[:3]
 
+    #list rating chung
+    rating = list(Rating.objects.filter(sanpham=sp))
+    if len(rating) !=0 :
+        avg_rating = 0
+        for i in rating:
+            avg_rating += i.rating 
+        avg_rating /= len(rating)
+    else:
+        avg_rating = 0
+        
+    #list_rating_user
+    try:
+        user = User.objects.filter(pk=request.session['id_user']).first()
+        sp = SanPham.objects.filter(pk=id).first()
+        obj_rating = Rating.objects.filter(user=user,sanpham = sp).first()
+        
+        if obj_rating:
+            rating_user = obj_rating.rating
+        else: 
+            rating_user = 0
+    except:
+        rating_user = 0
+    print(rating_user)
     if sp:
-        return render(request,'store/detail-product.html',{'sanpham': sp,'danhgia':danhgia})
+        return render(request,'store/detail-product.html',{'sanpham': sp,'danhgia':danhgia,'rating':avg_rating , 'rating_user': rating_user})
 
     
 
@@ -127,3 +150,30 @@ def search(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request,'store/shop.html',{'list_sp':page_obj})
+
+def vote_rating(request,id_sp):
+    try:
+        user = User.objects.filter(pk=request.session['id_user']).first()
+        sp = SanPham.objects.filter(pk=id_sp).first()
+        obj_rating = Rating.objects.filter(user=user,sanpham = sp).first()
+        vote = 0
+        if '1' in request.POST:
+            vote = 1
+        elif '2' in request.POST:
+            vote = 2
+        elif '3' in request.POST:
+            vote = 3
+        elif '4' in request.POST:
+            vote = 4
+        elif '5' in request.POST:
+            vote = 5
+   
+        if obj_rating:
+            obj_rating.rating = vote
+            obj_rating.save()
+        else:
+            Rating.objects.create(user = user, sanpham = sp , rating = vote).save()
+            
+        return detail_product(request,id_sp)
+    except:
+        return redirect('../../user/login')

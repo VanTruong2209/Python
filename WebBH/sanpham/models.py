@@ -38,4 +38,8 @@ class DanhGia(models.Model):
     noidung = models.CharField(max_length=2000,null=True)
     ngaydat = models.DateField(default=datetime.datetime.now,null=True)
 
- 
+
+class Rating(models.Model):
+    sanpham = models.ForeignKey(SanPham, on_delete=models.CASCADE,default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,default=1)
+    rating = models.IntegerField(default=0)
