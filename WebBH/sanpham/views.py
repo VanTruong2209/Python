@@ -1,4 +1,5 @@
 from itertools import count
+import math
 from django.shortcuts import redirect, render
 from django.db.models.query import QuerySet
 from .models import *
@@ -32,7 +33,7 @@ def detail_product(request,id):
         avg_rating /= len(rating)
     else:
         avg_rating = 0
-        
+    avg_rating = round(avg_rating,1)
     #list_rating_user
     try:
         user = User.objects.filter(pk=request.session['id_user']).first()

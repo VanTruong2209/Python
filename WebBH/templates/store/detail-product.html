@@ -96,8 +96,8 @@
                   </p>
                 </div>
                 <div class="rating-chooser">
-                  <p>Đánh giá</p>
-                  <p>{{rating}}/5</p>
+                  <p style="display : inline-block; width:90px;font-size: 18px">Xếp hạng: </p>
+                  <p style="display : inline-block;font-size: 18px">{{rating}}/5</p>
                   <p>Đánh giá của bạn</p>
                   <form action="{% url 'sanpham:vote_rating' sanpham.id_sanpham%}" method = "POST"> 
                     {% csrf_token %} {{form}}

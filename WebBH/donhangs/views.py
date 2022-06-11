@@ -1,5 +1,6 @@
 
 from django.shortcuts import redirect, render
+from numpy import append
 from pandas import period_range
 from requests import session
 from .models import *
@@ -46,6 +47,9 @@ def add_cart(request,id):
     except:
         return redirect('../../../user/login')
     sp = SanPham.objects.filter(pk=id).first()
+    if sp.soluong <= 0:
+        return render(request,'store/outofproduct.html')
+    
     user = User.objects.get(pk = id_user)
     donhang_user = DonHang.objects.filter(user=user,trangthai=False).first()
     # thêm vào đơn hàng đó
@@ -60,13 +64,17 @@ def add_cart(request,id):
         request.session['id_donhang'] = donhang_user.id
         
     else:
-        print(user)
+
         donhang = DonHang.objects.create(user = user)
         donhang.save()
         chitiet = ChiTietDonHang(donhang=donhang,sanpham=sp,soluong=1)
         chitiet.save()
-        print(1)
+
         request.session['id_donhang'] = donhang.id
+    
+    # soluong sanpham giam
+    sp.soluong -= 1
+    sp.save()
     return view_cart(request)
     
 def add_cart_num(request,id):
@@ -75,6 +83,10 @@ def add_cart_num(request,id):
     except:
         return redirect('../../../user/login')
     sp = SanPham.objects.filter(pk=id).first()
+    
+    if sp.soluong < int(request.POST.get('soluong')):
+        return render(request,'store/outofproduct.html',{"sl_conlai": sp.soluong})
+    
     user = User.objects.get(pk = id_user)
     donhang_user = DonHang.objects.filter(user=user,trangthai=False).first()
     # thêm vào đơn hàng đó
@@ -89,44 +101,65 @@ def add_cart_num(request,id):
         request.session['id_donhang'] = donhang_user.id
         
     else:
-        print(user)
+
         donhang = DonHang.objects.create(user = user)
         donhang.save()
-        chitiet = ChiTietDonHang(donhang=donhang,sanpham=sp,soluong=1)
+        chitiet = ChiTietDonHang(donhang=donhang,sanpham=sp,soluong=int(request.POST.get('soluong')))
         chitiet.save()
-        print(1)
         request.session['id_donhang'] = donhang.id
+        
+    sp.soluong -= int(request.POST.get('soluong'))
+    sp.save()    
     return view_cart(request)
 
 
 def update_cart(request, list_id):
     list_chitiet=[]
-    list_sp=list_soluong=[]
+    list_sl_tontai=[]
+    list_soluong_moi=[]
+    list_sl_cu=[]
+   
     chuoi = str(list_id)
     id = re.findall(r'\d+', chuoi)
     id = list(map(lambda x: int(x),id))
-    # print(id)
-    for item in id:
-        list_chitiet.append(ChiTietDonHang.objects.get(pk=item))
-    for item in list_chitiet:
-        list_sp.append(item.sanpham.id_sanpham)
-    print(list_sp)
-    # print(request.POST.get('soluong_19'))
-    # for item in list_sp:
-        # list_id_result.append(request.POST.get('\''+'soluong_'+str(item)+'\''))
-    dem=0;
-    for item in list_sp:
-        chuoi='soluong_'+str(item)
-        
-        list_soluong[dem] = (request.POST.get(chuoi))
-        dem+=1
 
+    for item in id:
+        list_chitiet.append(ChiTietDonHang.objects.filter(pk=item).first())
+    # print(list_chitiet)
+    list_sp=[]
+    for i in range(0,len(list_chitiet)):
+        list_sp.append(list_chitiet[i].sanpham.id_sanpham)
+        list_sl_tontai.append(list_chitiet[i].sanpham.soluong)
+        list_sl_cu.append(list_chitiet[i].soluong)
+
+    for item in list_sp:
+        chuoi='soluong_'+str(item)  
+        list_soluong_moi.append(request.POST.get(chuoi))
+    
+    list_check=[]
+    for i in range(0,len(list_sl_tontai)):
+        if  int(list_sl_tontai[i]) >= (int(list_soluong_moi[i]) - int(list_sl_cu[i])):
+            list_check.append(True)
+        else:
+            list_check.append(False)
+            
+    list_sp_outof =[]
     for i in range(0,len(id)):
         edit = ChiTietDonHang.objects.get(pk=id[i])
-        edit.soluong = list_soluong[i]
-        edit.save()
-        print(edit.soluong)
-    return redirect('../')
+        sp = SanPham.objects.filter(pk=edit.sanpham.id_sanpham).first()
+        if list_check[i]:
+            edit.soluong = list_soluong_moi[i]
+            edit.save()
+            sp.soluong -= (int(list_soluong_moi[i]) - int(list_sl_cu[i]))
+            sp.save()
+        else:
+            list_sp_outof.append({'sp':sp,'sl':list_soluong_moi[i]})
+    print(list_check)
+    if all(list_check):
+        return redirect('../')
+    else: 
+        return render(request,'store/outofproduct.html',{"list_sp_outof":list_sp_outof})
+        
 
 
 def remove_cart(request,id):
