@@ -1,12 +1,12 @@
 
 from django.shortcuts import redirect, render
-from numpy import append
-from pandas import period_range
-from requests import session
 from .models import *
 from user.models import *
 from .forms import *
 import re
+import calendar
+from datetime import datetime
+from django.db.models import Q
 # Create your views here.
 def view_cart(request):
     try:
@@ -62,9 +62,7 @@ def add_cart(request,id):
         else:
             ChiTietDonHang(donhang=donhang_user,sanpham=sp,soluong=1).save()
         request.session['id_donhang'] = donhang_user.id
-        
     else:
-
         donhang = DonHang.objects.create(user = user)
         donhang.save()
         chitiet = ChiTietDonHang(donhang=donhang,sanpham=sp,soluong=1)
@@ -194,3 +192,35 @@ def chitiet(request,id):
     list = ChiTietDonHang.objects.filter(donhang=donhang)
     return render(request,'store/listDetail.html',{'list':list})
 
+def doanhthu(request):
+    # month = request.POST.get('thang')
+    # year = request.POST.get('nam')
+    if request.method == "POST":
+        month = int(request.POST.get('month'))
+        year = int(request.POST.get('year'))
+        d_fmt = "{0:>02}.{1:>02}.{2}"
+        date_from = datetime.strptime(d_fmt.format(1, month, year), '%d.%m.%Y').date()
+        last_day_of_month = calendar.monthrange(year, month)[1]
+        date_to = datetime.strptime(d_fmt.format(last_day_of_month, month, year), '%d.%m.%Y').date()
+
+        list_ct = ChiTietDonHang.objects.filter(Q(donhang__ngaydat__gte=date_from, donhang__ngaydat__lte=date_to)|Q(donhang__ngaydat__lt=date_from, donhang__ngaydat__gte=date_from))
+        list_ct = list(list_ct)
+        list_ct_edit = []
+        list_id=[]
+        for i in list_ct:
+            list_id.append(i.sanpham.id_sanpham)
+            list_ct_edit.append([i.sanpham,i.soluong])
+        map_id = list(set(list_id))  # mảng chưa id 
+        list_sl = []                # mảng chứa sl đã bán 
+        for id in map_id:
+            sl = 0
+            for i in list_ct_edit:
+                if id == i[0].id_sanpham:
+                    sl += i[1]
+            list_sl.append(sl)
+        list_sp = list(map(lambda x,y: {"sanpham" : SanPham.objects.get(pk=x), "soluongban": y}, map_id ,list_sl))
+        for i in list_sp:
+            i["doanhthu"] = i["sanpham"].dongia * i["soluongban"]
+        return render(request,"store/doanhthu.html",{"list_sp":list_sp})
+    else:
+        return render(request,"store/doanhthu.html")

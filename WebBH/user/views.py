@@ -64,7 +64,7 @@ def update_profile(request,id):
         form = UserForm(user_update,instance=user)
         if form.is_valid():
             form.save()
-        return redirect('../../home')
+        return redirect('../../')
     form = UserImageForm()
     return render(request,'store/update_profile.html',{'user':user,'form1':form})
 

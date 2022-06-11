@@ -71,9 +71,11 @@ def list_branch_product(request, id):
             'dem' : sp
         }
         dem.append(obj)
-    # print(dem)
+    paginator = Paginator(list_sp, 8)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     # dem : chua hang va dem tung loai san pham
-    return render(request,'store/category_product.html',{'list_category':list_category,'list_branch':dem,'list_sp':list_sp})
+    return render(request,'store/category_product.html',{'list_category':list_category,'list_branch':dem,'list_sp':page_obj})
 
 def list_category(request, id):
     list_category = LoaiSanPham.objects.filter(pk=id).first()
@@ -98,9 +100,11 @@ def list_category_product(request, id):
             'dem' : sp
         }
         dem.append(obj)
-    # print(dem)
+    paginator = Paginator(list_sp, 8)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     # dem : chua hang va dem tung loai san pham
-    return render(request,'store/category_product.html',{'list_category':list_category,'list_branch':dem,'list_sp':list_sp})
+    return render(request,'store/category_product.html',{'list_category':list_category,'list_branch':dem,'list_sp':page_obj})
 
 def category(request):
     list_category = LoaiSanPham.objects.all()

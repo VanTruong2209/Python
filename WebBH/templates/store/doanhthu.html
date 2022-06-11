@@ -1,0 +1,79 @@
+{% extends 'store/base.html'%} {% load static%} {% load humanize %} {% block contentblock%}
+<div class="product-big-title-area">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="product-bit-title text-center">
+          <h2>Doanh thu</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="single-product-area">
+  <div class="zigzag-bottom"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="product-content-right">
+          <div class="woocommerce">
+            <form action="{% url 'donhangs:doanhthu' %}" method="post">
+              {%csrf_token%} {{form}}
+              <input type="text" name="month" />
+              <input type="text" name="year" />
+              <input type="submit" value="ok" />
+            </form>
+            <table cellspacing="0" class="shop_table cart">
+              <thead>
+                <tr>
+                  <th class="product-name">Tên Sản phẩm</th>
+                  <th class="product-name">Hình ảnh</th>
+
+                  <th class="product-subtotal">Số lượng bán</th>
+                  <th class="product-quantity">Số lượng còn lại</th>
+                  <th class="product-quantity">Doanh thu</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- item -->
+
+                {% for item in list_sp %}
+                <tr>
+                  <td class="product-price">
+                    <span class="amount">{{item.sanpham.tensanpham}}</span>
+                  </td>
+
+                  <td class="product-price">
+                    <span class="amount"></span>
+                  </td>
+
+                  <td class="product-price">
+                    <span class="amount">{{item.soluongban}}</span>
+                  </td>
+                  <td class="product-price">
+                    <span class="amount">{{item.sanpham.soluong}}</span>
+                  </td>
+                  <td class="product-price">
+                    <span class="amount">{{item.doanhthu|intcomma}} VNĐ</span>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <table cellspacing="0" class="shop_table cart">
+              <thead>
+                <tr>
+                  <th class="product-name">Tổng doanh thu</th>
+                  <th class="product-name">Hình ảnh</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
