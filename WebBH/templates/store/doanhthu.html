@@ -1,4 +1,5 @@
 {% extends 'store/base.html'%} {% load static%} {% load humanize %} {% block contentblock%}
+
 <div class="product-big-title-area">
   <div class="container">
     <div class="row">
@@ -19,16 +20,21 @@
           <div class="woocommerce">
             <form action="{% url 'donhangs:doanhthu' %}" method="post">
               {%csrf_token%} {{form}}
-              <input type="text" name="month" />
-              <input type="text" name="year" />
-              <input type="submit" value="ok" />
+              <div style="margin-left: auto; margin-right: auto; width: 550px; margin-bottom: 40px">
+                <p class=" " style="display: inline-block; width: 150px; font-size: 20px">Nhập thời gian:</p>
+                <select name="year" id="year" style="font-size: 18px; width: 158px; height: 36px"></select>
+
+                <select name="month" id="month" style="font-size: 18px; width: 158px; height: 36px"></select>
+                <!-- <input type="text" name="month" />
+                  <input type="text" name="year" /> -->
+                <input type="submit" value="ok" />
+              </div>
             </form>
             <table cellspacing="0" class="shop_table cart">
               <thead>
                 <tr>
                   <th class="product-name">Tên Sản phẩm</th>
                   <th class="product-name">Hình ảnh</th>
-
                   <th class="product-subtotal">Số lượng bán</th>
                   <th class="product-quantity">Số lượng còn lại</th>
                   <th class="product-quantity">Doanh thu</th>
@@ -64,11 +70,15 @@
               <thead>
                 <tr>
                   <th class="product-name">Tổng doanh thu</th>
-                  <th class="product-name">Hình ảnh</th>
+                  <th class="product-name">{{doanhthu|intcomma}} VNĐ</th>
                 </tr>
               </thead>
               <tbody></tbody>
             </table>
+
+            {% if output %}
+            <div id="myFirstchart-container">{{ output|safe }}</div>
+            {% endif%}
           </div>
         </div>
       </div>

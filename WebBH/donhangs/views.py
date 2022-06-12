@@ -1,5 +1,6 @@
 
 from django.shortcuts import redirect, render
+from numpy import char
 from .models import *
 from user.models import *
 from .forms import *
@@ -7,6 +8,10 @@ import re
 import calendar
 from datetime import datetime
 from django.db.models import Q
+from collections import OrderedDict
+
+# Include the `fusioncharts.py` file that contains functions to embed the charts.
+from .fusioncharts import FusionCharts
 # Create your views here.
 def view_cart(request):
     try:
@@ -192,9 +197,93 @@ def chitiet(request,id):
     list = ChiTietDonHang.objects.filter(donhang=donhang)
     return render(request,'store/listDetail.html',{'list':list})
 
+def bieudodoanhthu(month,year):
+    d_fmt = "{0:>02}.{1:>02}.{2}"
+    date_from = datetime.strptime(d_fmt.format(1, month, year), '%d.%m.%Y').date()
+    last_day_of_month = calendar.monthrange(year, month)[1]
+    date_to = datetime.strptime(d_fmt.format(last_day_of_month, month, year), '%d.%m.%Y').date()
+
+    list_ct = ChiTietDonHang.objects.filter(Q(donhang__ngaydat__gte=date_from, donhang__ngaydat__lte=date_to)|Q(donhang__ngaydat__lt=date_from, donhang__ngaydat__gte=date_from))
+    list_ct = list(list_ct)
+    list_ct_edit = []
+    list_id=[]
+    for i in list_ct:
+        list_id.append(i.sanpham.id_sanpham)
+        list_ct_edit.append([i.sanpham,i.soluong])
+    map_id = list(set(list_id))  # mảng chưa id 
+    list_sl = []                # mảng chứa sl đã bán 
+    for id in map_id:
+        sl = 0
+        for i in list_ct_edit:
+            if id == i[0].id_sanpham:
+                sl += i[1]
+        list_sl.append(sl)
+    list_sp = list(map(lambda x,y: {"sanpham" : SanPham.objects.get(pk=x), "soluongban": y}, map_id ,list_sl))
+    for i in list_sp:
+        i["doanhthu"] = i["sanpham"].dongia * i["soluongban"]
+    doanthu = 0
+    for i in list_sp:
+        doanthu += i["doanhthu"]
+    return  doanthu
+            
+def chart(thang , doanhthuthang):
+
+    # # Chart data is passed to the `dataSource` parameter, as dictionary in the form of key-value pairs.
+    # dataSource = OrderedDict()
+
+    # # The `chartConfig` dict contains key-value pairs data for chart attribute
+    # chartConfig = OrderedDict()
+    # chartConfig["caption"] = "Doanh thu theo tháng trong năm 2022"
+    # # chartConfig["subCaption"] = "In MMbbl = One Million barrels"
+    # chartConfig["xAxisName"] = "Tháng"
+    # chartConfig["yAxisName"] = "Doanh thu"
+    # chartConfig["numberSuffix"] = "K"
+    # chartConfig["theme"] = "fusion"
+
+    # # The `chartData` dict contains key-value pairs data
+    # chartData = OrderedDict()
+    # print(1)
+    # for i in thang:
+    #     if i ==0 :
+    #         continue
+    #     chuoi = 'Tháng ' + str(i)
+    #     chartData[chuoi] = doanhthuthang[i]
+    
+
+    # dataSource["chart"] = chartConfig
+    # dataSource["data"] = []
+
+    # # Convert the data in the `chartData` array into a format that can be consumed by FusionCharts.
+    # # The data for the chart should be in an array wherein each element of the array is a JSON object
+    # # having the `label` and `value` as keys.
+
+    # # Iterate through the data in `chartData` and insert in to the `dataSource['data']` list.
+    # for key, value in chartData.items():
+    #     data = {}
+    #     data["label"] = key
+    #     data["value"] = value
+    #     dataSource["data"].append(data)
+    
+    dataSource = OrderedDict()
+    dataSource["data"] = []
+    # The data for the chart should be in an array wherein each element of the array  is a JSON object having the `label` and `value` as keys.
+    for i in thang:
+        dataSource["data"].append({"label": str(i), "value": doanhthuthang[i]})
+
+    # The `chartConfig` dict contains key-value pairs of data for chart attribute
+
+    chartConfig = OrderedDict()
+    chartConfig["caption"] = "Doanh thu theo tháng năm 2022"
+    chartConfig["xAxisName"] = "Tháng"
+    chartConfig["yAxisName"] = "Doanh thu (VNĐ)"
+    chartConfig["numberSuffix"] = "K"
+    chartConfig["theme"] = "fusion"
+
+    dataSource["chart"] = chartConfig
+    column2D = FusionCharts("column2d", "myFirstChart", "600", "400", "myFirstchart-container", "json", dataSource)
+    return column2D
+    
 def doanhthu(request):
-    # month = request.POST.get('thang')
-    # year = request.POST.get('nam')
     if request.method == "POST":
         month = int(request.POST.get('month'))
         year = int(request.POST.get('year'))
@@ -221,6 +310,18 @@ def doanhthu(request):
         list_sp = list(map(lambda x,y: {"sanpham" : SanPham.objects.get(pk=x), "soluongban": y}, map_id ,list_sl))
         for i in list_sp:
             i["doanhthu"] = i["sanpham"].dongia * i["soluongban"]
-        return render(request,"store/doanhthu.html",{"list_sp":list_sp})
+        doanthu = 0
+        for i in list_sp:
+            doanthu += i["doanhthu"]
+        return render(request,"store/doanhthu.html",{"list_sp":list_sp,"doanhthu" : doanthu})
     else:
-        return render(request,"store/doanhthu.html")
+        thang = []
+        doanhthu_ = []
+        thang.append(0)
+        doanhthu_.append(0)
+        for i in range(1,6):
+            doanhthu_.append(bieudodoanhthu(i,2022))
+            thang.append(i)
+        print(thang,doanhthu_)
+        column2D =  chart(thang,doanhthu_)
+        return render(request,"store/doanhthu.html",{'output' : column2D.render()})
