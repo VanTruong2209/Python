@@ -9,7 +9,8 @@ import calendar
 from datetime import datetime
 from django.db.models import Q
 from collections import OrderedDict
-
+from datetime import date
+from sanpham.models import LoaiSanPham
 # Include the `fusioncharts.py` file that contains functions to embed the charts.
 from .fusioncharts import FusionCharts
 # Create your views here.
@@ -224,104 +225,100 @@ def bieudodoanhthu(month,year):
     doanthu = 0
     for i in list_sp:
         doanthu += i["doanhthu"]
-    return  doanthu
-            
-def chart(thang , doanhthuthang):
+    return  {"doanhthu" : doanthu ,  "list_sp" : list_sp}
 
-    # # Chart data is passed to the `dataSource` parameter, as dictionary in the form of key-value pairs.
-    # dataSource = OrderedDict()
 
-    # # The `chartConfig` dict contains key-value pairs data for chart attribute
-    # chartConfig = OrderedDict()
-    # chartConfig["caption"] = "Doanh thu theo tháng trong năm 2022"
-    # # chartConfig["subCaption"] = "In MMbbl = One Million barrels"
-    # chartConfig["xAxisName"] = "Tháng"
-    # chartConfig["yAxisName"] = "Doanh thu"
-    # chartConfig["numberSuffix"] = "K"
-    # chartConfig["theme"] = "fusion"
-
-    # # The `chartData` dict contains key-value pairs data
-    # chartData = OrderedDict()
-    # print(1)
-    # for i in thang:
-    #     if i ==0 :
-    #         continue
-    #     chuoi = 'Tháng ' + str(i)
-    #     chartData[chuoi] = doanhthuthang[i]
-    
-
-    # dataSource["chart"] = chartConfig
-    # dataSource["data"] = []
-
-    # # Convert the data in the `chartData` array into a format that can be consumed by FusionCharts.
-    # # The data for the chart should be in an array wherein each element of the array is a JSON object
-    # # having the `label` and `value` as keys.
-
-    # # Iterate through the data in `chartData` and insert in to the `dataSource['data']` list.
-    # for key, value in chartData.items():
-    #     data = {}
-    #     data["label"] = key
-    #     data["value"] = value
-    #     dataSource["data"].append(data)
-    
+def chart_month(thang , doanhthuthang , ten_x , ten_y , tenbd):
     dataSource = OrderedDict()
     dataSource["data"] = []
-    # The data for the chart should be in an array wherein each element of the array  is a JSON object having the `label` and `value` as keys.
-    for i in thang:
-        dataSource["data"].append({"label": str(i), "value": doanhthuthang[i]})
-
-    # The `chartConfig` dict contains key-value pairs of data for chart attribute
+    for i in range(0,len(thang)):
+        if i == 0 and thang[0] == 0:
+            continue
+        dataSource["data"].append({"label": str(thang[i]), "value": doanhthuthang[i]})
 
     chartConfig = OrderedDict()
-    chartConfig["caption"] = "Doanh thu theo tháng năm 2022"
-    chartConfig["xAxisName"] = "Tháng"
-    chartConfig["yAxisName"] = "Doanh thu (VNĐ)"
-    chartConfig["numberSuffix"] = "K"
+    chartConfig["caption"] = tenbd
+    chartConfig["xAxisName"] = ten_x
+    chartConfig["yAxisName"] = ten_y
+    chartConfig["numberSuffix"] = ""
     chartConfig["theme"] = "fusion"
 
     dataSource["chart"] = chartConfig
-    column2D = FusionCharts("column2d", "myFirstChart", "600", "400", "myFirstchart-container", "json", dataSource)
+    column2D = FusionCharts("column2d", "myFirstChart", "600", "300", "myFirstchart-container", "json", dataSource)
     return column2D
     
 def doanhthu(request):
     if request.method == "POST":
         month = int(request.POST.get('month'))
         year = int(request.POST.get('year'))
-        d_fmt = "{0:>02}.{1:>02}.{2}"
-        date_from = datetime.strptime(d_fmt.format(1, month, year), '%d.%m.%Y').date()
-        last_day_of_month = calendar.monthrange(year, month)[1]
-        date_to = datetime.strptime(d_fmt.format(last_day_of_month, month, year), '%d.%m.%Y').date()
-
-        list_ct = ChiTietDonHang.objects.filter(Q(donhang__ngaydat__gte=date_from, donhang__ngaydat__lte=date_to)|Q(donhang__ngaydat__lt=date_from, donhang__ngaydat__gte=date_from))
-        list_ct = list(list_ct)
-        list_ct_edit = []
-        list_id=[]
-        for i in list_ct:
-            list_id.append(i.sanpham.id_sanpham)
-            list_ct_edit.append([i.sanpham,i.soluong])
-        map_id = list(set(list_id))  # mảng chưa id 
-        list_sl = []                # mảng chứa sl đã bán 
-        for id in map_id:
-            sl = 0
-            for i in list_ct_edit:
-                if id == i[0].id_sanpham:
-                    sl += i[1]
-            list_sl.append(sl)
-        list_sp = list(map(lambda x,y: {"sanpham" : SanPham.objects.get(pk=x), "soluongban": y}, map_id ,list_sl))
-        for i in list_sp:
-            i["doanhthu"] = i["sanpham"].dongia * i["soluongban"]
-        doanthu = 0
-        for i in list_sp:
-            doanthu += i["doanhthu"]
-        return render(request,"store/doanhthu.html",{"list_sp":list_sp,"doanhthu" : doanthu})
+        obj = bieudodoanhthu(month,year) 
+        [tron, cot] = doanhthu_catelogy(month,year)
+        return render(request,"store/doanhthu.html",{"list_sp":obj['list_sp'],"doanhthu" : obj['doanhthu'], 'output_tron' : tron.render(), 'output_cot' : cot.render()})
+        # return render(request,"store/doanhthu.html",{"list_sp":obj['list_sp'],"doanhthu" : obj['doanhthu']})
     else:
         thang = []
         doanhthu_ = []
         thang.append(0)
-        doanhthu_.append(0)
-        for i in range(1,6):
-            doanhthu_.append(bieudodoanhthu(i,2022))
+        doanhthu_.append(0)       
+        for i in range(1,date.today().month+1):
+            doanhthu_.append(bieudodoanhthu(i,2022)['doanhthu'])
             thang.append(i)
-        print(thang,doanhthu_)
-        column2D =  chart(thang,doanhthu_)
+        column2D =  chart_month(thang,doanhthu_,"tháng","Doanh thu (VNĐ)","Doanh thu theo tháng năm 2022")
+        # [tron, cot] = doanhthu_catelogy(6,2022)
         return render(request,"store/doanhthu.html",{'output' : column2D.render()})
+        # obj = bieudodoanhthu(month,year) 
+        # return render(request,"store/doanhthu.html",{"list_sp":obj['list_sp'],"doanhthu" : obj['doanhthu']})
+    
+def doanhthu_catelogy(month,year):
+    d_fmt = "{0:>02}.{1:>02}.{2}"
+    date_from = datetime.strptime(d_fmt.format(1, month, year), '%d.%m.%Y').date()
+    last_day_of_month = calendar.monthrange(year, month)[1]
+    date_to = datetime.strptime(d_fmt.format(last_day_of_month, month, year), '%d.%m.%Y').date()
+
+    list_ct = ChiTietDonHang.objects.filter(Q(donhang__ngaydat__gte=date_from, donhang__ngaydat__lte=date_to)|Q(donhang__ngaydat__lt=date_from, donhang__ngaydat__gte=date_from))
+    list_ct = list(list_ct)
+    list_ct_edit = []
+    list_id=[]
+    list_cate=[]
+    for i in list_ct:
+        list_id.append(i.sanpham.id_sanpham)
+        list_ct_edit.append([i.sanpham,i.soluong])
+        list_cate.append(i.sanpham.loaisanpham.id_loaisanpham)
+    map_id = list(set(list_cate))  # mảng chưa id 
+    list_sl = []                # mảng chứa sl đã bán 
+    for id in map_id:
+        sl = 0
+        for i in list_ct_edit:
+            if id == i[0].loaisanpham.id_loaisanpham:
+                sl += i[1]*i[0].dongia
+        list_sl.append(sl)
+    list_sp = list(map(lambda x,y: {"loaisanpham" : LoaiSanPham.objects.get(pk=x), "doanhthu": y}, map_id ,list_sl))
+    truc_dt=[]
+    truc_sp=[]
+    for i in list_sp:
+        truc_dt.append(i['doanhthu'])
+        truc_sp.append(i['loaisanpham'].tenloaisanpham)
+    
+    return [chart_tron_cate(list_sp) , chart_month(truc_sp,truc_dt,"loại sản phẩm" , "Doanh thu (VNĐ)" , "Doanh thu theo loại sp")]
+
+def chart_tron_cate(list_cate):
+    chuoi = ""
+    for i in list_cate:
+        chuoi += " { 'label': '" + str(i['loaisanpham'].tenloaisanpham) +"', 'value': '" + str(i['doanhthu']) + "'}, "
+    chuoi1 = """{
+        "chart": {
+        "caption": "Doanh thu theo loại sản phẩm tháng 6",
+        "plottooltext": "<b>$percentValue</b> tổng doanh thu",
+        "showlegend": "1",
+        "showpercentvalues": "1",
+        "legendposition": "bottom",
+        "usedataplotcolorforlabels": "1",
+        "theme": "fusion"
+        },
+        "data": [
+        """ + chuoi + """
+    ]
+    }"""
+    print(chuoi)
+    chartObj = FusionCharts( 'pie2d', 'ex1', '500', '300', 'chart-1', 'json', chuoi1)   
+    return chartObj

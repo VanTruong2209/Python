@@ -77,8 +77,15 @@
             </table>
 
             {% if output %}
-            <div id="myFirstchart-container">{{ output|safe }}</div>
+            <div id="myFirstchart-container" style="margin-right: auto; margin-left: auto; width: 700px">
+              {{ output|safe }}
+            </div>
+            {% endif%} {% if output_cot and output_tron %}
+            <div id="myFirstchart-container" style="display: inline-block">{{ output_cot|safe }}</div>
+            <div id="chart-1" style="display: inline-block">{{ output_tron|safe }}</div>
+
             {% endif%}
+            <!-- dumping JavaScript code here -->
           </div>
         </div>
       </div>
