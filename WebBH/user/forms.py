@@ -4,8 +4,12 @@ from .models import *
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['email','hoten','gioitinh','dienthoai','diachi']
 
+class UserPassForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username','password']
 class UserImageForm(forms.ModelForm):
     class Meta:
         model = User

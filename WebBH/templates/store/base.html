@@ -93,9 +93,13 @@
                   <a href="{% url 'user:signup' %}"><i class="fa fa-user-plus"></i> Đăng kí </a>
                 </li>
                 {% endif %}
+                {% if  request.session.quyen %}
                 <li>    
                   <a href="{% url 'donhangs:doanhthu' %}"><i class="fa fa-user-plus"></i> Doanhthu </a>
                 </li>
+                {% endif %}
+                
+
               </ul>
             </div>
           </div>
