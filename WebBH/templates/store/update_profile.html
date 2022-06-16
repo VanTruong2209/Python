@@ -329,7 +329,7 @@
               </div>
             </div>
           </form>
-          <form action="{% url 'user:password' request.session.id_user %}" method="post">
+          <form onsubmit="submitForm(event)" action="{% url 'user:password' request.session.id_user %}" method="post">
             {% csrf_token %} {{form}}
             <div class="row gutters">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -356,6 +356,7 @@
                     class="form-control"
                     name="password"
                     required
+                    id ="inputPassword"
                   />
                 </div>
               </div>
@@ -370,7 +371,7 @@
                     class="form-control"
                     name="confirm"
                     required
-
+                    id ="inputConfirm"
                   />
                 </div>
               </div>
@@ -508,7 +509,18 @@
 
     <!-- Main Script -->
     <script src="{% static 'js/main.js' %}"></script>
-  
+    
+    <script>
+      function submitForm(event){ 
+        var pass = document.getElementById("inputPassword").value;
+        var confirm1 = document.getElementById("inputConfirm").value;
+        console.log(pass,confirm1);
+        
+        if(pass !== confirm1)
+        event.preventDefault();
+        alert("Mật khẩu không trùng khớp!")
+      }
+    </script>1
   </body>
 </html>
 

@@ -253,7 +253,7 @@ def doanhthu(request):
         year = int(request.POST.get('year'))
         obj = bieudodoanhthu(month,year) 
         [tron, cot] = doanhthu_catelogy(month,year)
-        return render(request,"store/doanhthu.html",{"list_sp":obj['list_sp'],"doanhthu" : obj['doanhthu'], 'output_tron' : tron.render(), 'output_cot' : cot.render()})
+        return render(request,"store/doanhthu.html",{"list_sp":obj['list_sp'],"doanhthu" : obj['doanhthu'], 'output_tron' : tron.render(), 'output_cot' : cot.render() , 'month':month, 'year':year })
         # return render(request,"store/doanhthu.html",{"list_sp":obj['list_sp'],"doanhthu" : obj['doanhthu']})
     else:
         thang = []
@@ -307,7 +307,7 @@ def chart_tron_cate(list_cate):
         chuoi += " { 'label': '" + str(i['loaisanpham'].tenloaisanpham) +"', 'value': '" + str(i['doanhthu']) + "'}, "
     chuoi1 = """{
         "chart": {
-        "caption": "Doanh thu theo loại sản phẩm tháng 6",
+        "caption": "Doanh thu theo loại sản phẩm ",
         "plottooltext": "<b>$percentValue</b> tổng doanh thu",
         "showlegend": "1",
         "showpercentvalues": "1",

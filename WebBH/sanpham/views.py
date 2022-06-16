@@ -1,8 +1,8 @@
 from itertools import count
 import math
 from django.shortcuts import redirect, render
-from django.db.models.query import QuerySet
 from .models import *
+from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
 # Create your views here.
 def home(request):

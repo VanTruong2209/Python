@@ -22,14 +22,21 @@
               {%csrf_token%} {{form}}
               <div style="margin-left: auto; margin-right: auto; width: 550px; margin-bottom: 40px">
                 <p class=" " style="display: inline-block; width: 150px; font-size: 20px">Nhập thời gian:</p>
+
                 <select name="year" id="year" style="font-size: 18px; width: 158px; height: 36px"></select>
 
                 <select name="month" id="month" style="font-size: 18px; width: 158px; height: 36px"></select>
+
                 <!-- <input type="text" name="month" />
                   <input type="text" name="year" /> -->
                 <input type="submit" value="ok" />
               </div>
             </form>
+            {% if year and month%}
+            <p style="text-align: center; font-size: 24px; margin-bottom: 30px; color: #1abc9c">
+              Doanh thu tháng {{month}}, {{year}}
+            </p>
+            {% endif %}
             <table cellspacing="0" class="shop_table cart">
               <thead>
                 <tr>
