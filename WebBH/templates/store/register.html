@@ -7,10 +7,7 @@
     <script type="application/x-javascript">
       addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); }
     </script>
-    <link
-      href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i"
-      rel="stylesheet"
-    />
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet" />
     <style>
       html,
       body,
@@ -260,16 +257,8 @@
         border: solid 1px rgba(255, 255, 255, 0.37);
         -webkit-transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
         transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
-        background: -webkit-linear-gradient(
-          top,
-          rgba(255, 255, 255, 0) 96%,
-          #fff 4%
-        );
-        background: linear-gradient(
-          to bottom,
-          rgba(255, 255, 255, 0) 96%,
-          #fff 4%
-        );
+        background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 96%, #fff 4%);
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, #fff 4%);
         background-position: -800px 0;
         background-size: 100%;
         background-repeat: no-repeat;
@@ -898,53 +887,21 @@
         <div class="agileits-top">
           <form action="{% url 'user:signup' %}" method="post">
             {% csrf_token %}{{form}}
-            <input
-              class="text email"
-              type="text"
-              name="hoten"
-              placeholder="Họ tên"
-              required=""
-            />
-            <input
-              class="text"
-              type="text"
-              name="username"
-              placeholder="Username"
-              required=""
-            />
-            <input
-              class="text email"
-              type="email"
-              name="email"
-              placeholder="Email"
-              required=""
-            />
-            <input
-              class="text"
-              type="password"
-              name="password"
-              placeholder="Password"
-              required=""
-            />
-            <input
-              class="text w3lpass"
-              type="password"
-              name="confirm"
-              placeholder="Confirm Password"
-              required=""
-            />
+            <input class="text email" type="text" name="hoten" placeholder="Họ tên" required="" />
+            <input class="text" type="text" name="username" placeholder="Username" required="" />
+            <input class="text email" type="email" name="email" placeholder="Email" required="" />
+            <input class="text" type="password" name="password" placeholder="Password" required="" />
+            <input class="text w3lpass" type="password" name="confirm" placeholder="Confirm Password" required="" />
             <div class="wthree-text">
               <label class="anim">
                 <input type="checkbox" class="checkbox" required="" />
-                <span
-                  >Tôi đồng về điều khoản dịch vụ và chính sách bảo mật</span
-                >
+                <span>Tôi đồng về điều khoản dịch vụ và chính sách bảo mật</span>
               </label>
               <div class="clear"></div>
             </div>
             <input type="submit" value="SIGNUP" />
           </form>
-          <p>Đã có tài khoản? <a href="#"> Đăng nhập ngay!</a></p>
+          <p>Đã có tài khoản? <a href="{% url 'user:login' %}"> Đăng nhập ngay!</a></p>
         </div>
       </div>
       <!-- copyright -->

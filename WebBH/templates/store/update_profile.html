@@ -101,6 +101,11 @@
                     ><i class="fa fa-user"></i>Thanh toán</a
                   >
                 </li> -->
+                {% if request.session.id_user %}
+                <li>
+                  <a href="{% url 'donhangs:history' %}"><i class="fa fa-user"></i>Lịch sử giao dịch </a>
+                </li>
+                {% endif %}
                 <li>
                   {% if request.session.id_user %}
                   <a href="{% url 'user:logout' %}"><i class="fa fa-user"></i> Đăng xuất </a>
@@ -108,11 +113,17 @@
                   <a href="{% url 'user:login' %}"><i class="fa fa-user"></i> Đăng nhập </a>
                   {% endif %}
                 </li>
+                {% if  request.session.quyen %}
+                <li>    
+                  <a href="{% url 'donhangs:doanhthu' %}"><i class="fa fa-user-plus"></i> Doanhthu </a>
+                </li>
+                {% endif %}
                 {% if not request.session.id_user %}
                 <li>    
                   <a href="{% url 'user:signup' %}"><i class="fa fa-user"></i> Đăng kí </a>
                 </li>
                 {% endif %}
+                
               </ul>
             </div>
           </div>
@@ -195,34 +206,43 @@
           <div class="card-body">
             <div class="account-settings">
               <div class="user-profile">
-                <div class="user-avatar">
+                 <div class="user-avatar">
+                   {% if user.image %}
                   <img
-                    src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                    alt="Maxwell Admin"
+                    src="{{user.image.url}}"
+                    style="height: 180px; width:180px;object-fit: cover;"
                   />
+                  {%else%}
+                  <img
+                    src=""
+                    alt="{{user.hoten}}"
+                  />
+                  {%endif%}
+
                 </div>
-                <h5 class="user-name">Yuki Hayashi</h5>
-                <h6 class="user-email">yuki@Maxwell.com</h6>
+                <h5 class="user-name" style="font-size: 18px">{{user.hoten}}</h5>
+              
+                <form method = "post" action="{% url 'user:avatarView'%}" enctype="multipart/form-data">
+                  <p style="display:inline-block;width:20px"></p>
+                  {% csrf_token %}   {{ form1.as_p }}
+                  <!-- <input type="file" id="myfile" name="myfile" style="margin-top:20px;margin-bottom:20px" > -->
+                  <button type="submit" style="height: 30px; font-size:14px; line-height: 10px; "> Upload </button>
+              </form>
               </div>
-              <div class="about">
-                <h5>About</h5>
-                <p>
-                  I'm Yuki. Full Stack Designer I enjoy creating user-centric,
-                  delightful and human experiences.
-                </p>
-              </div>
+              
             </div>
           </div>
         </div>
       </div>
-      <form action="{% url 'user:profile' request.session.id_user %}" method="post">
-        {% csrf_token %} {{form}}
+      
       <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
         <div class="card h-100">
+          <form action="{% url 'user:profile' request.session.id_user %}" method="post">
+            {% csrf_token %} {{form}}
           <div class="card-body">
             <div class="row gutters">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <h6 class="mb-2 text-primary" >Thông tin cá nhân</h6>
+                <h6 class="mb-2 text-primary" style="font-size: 20px">Thông tin cá nhân</h6>
               </div>
               <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                 <div class="form-group">
@@ -295,7 +315,25 @@
             </div>
             <div class="row gutters">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <h6 class="mb-2 text-primary" style="margin-top:20px" >Thay đổi mật khẩu</h6>
+                <div class="text-right">
+                
+                  <button
+                    type="submit"
+                    id="submit"
+                    name="submit"
+                    class="btn btn-primary"
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+          <form onsubmit="submitForm(event)" action="{% url 'user:password' request.session.id_user %}" method="post">
+            {% csrf_token %} {{form}}
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h6 class="mb-2 text-primary" style="margin-top:40px;font-size: 20px;" >Thay đổi mật khẩu</h6>
               </div>
               <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                 <div class="form-group">
@@ -305,6 +343,7 @@
                     class="form-control"
                     name="username"
                     value = {{user.username}}
+                    readonly
 
                   />
                 </div>
@@ -316,7 +355,8 @@
                     type="password"
                     class="form-control"
                     name="password"
-                    value = {{user.password}}
+                    required
+                    id ="inputPassword"
                   />
                 </div>
               </div>
@@ -330,8 +370,8 @@
                     type="password"
                     class="form-control"
                     name="confirm"
-                    value = {{user.password}}
-
+                    required
+                    id ="inputConfirm"
                   />
                 </div>
               </div>
@@ -352,6 +392,7 @@
                 </div>
               </div>
             </div>
+          </form>
           </div>
         </div>
       </div>
@@ -468,7 +509,18 @@
 
     <!-- Main Script -->
     <script src="{% static 'js/main.js' %}"></script>
-  
+    
+    <script>
+      function submitForm(event){ 
+        var pass = document.getElementById("inputPassword").value;
+        var confirm1 = document.getElementById("inputConfirm").value;
+        console.log(pass,confirm1);
+        
+        if(pass !== confirm1)
+        event.preventDefault();
+        alert("Mật khẩu không trùng khớp!")
+      }
+    </script>1
   </body>
 </html>
 

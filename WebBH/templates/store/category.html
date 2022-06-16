@@ -5,18 +5,13 @@
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-{% extends 'store/base.html'%} {% load static %} {%block contentblock%}
+{% extends 'store/base.html'%} {% load static %} {% load humanize %} {%block contentblock%}
 
 <div class="mainmenu-area">
   <div class="container">
     <div class="row">
       <div class="navbar-header">
-        <button
-          type="button"
-          class="navbar-toggle"
-          data-toggle="collapse"
-          data-target=".navbar-collapse"
-        >
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -68,11 +63,7 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h4 class="panel-title">
-                  <a
-                    href="{% url 'sanpham:list_category_product' item.id_loaisanpham %}"
-                  >
-                    {{item.tenloaisanpham}}
-                  </a>
+                  <a href="{% url 'sanpham:list_category_product' item.id_loaisanpham %}"> {{item.tenloaisanpham}} </a>
                 </h4>
               </div>
             </div>

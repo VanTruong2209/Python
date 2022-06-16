@@ -1,0 +1,56 @@
+{% extends 'store/base.html'%} {% load static%} {% load humanize %} {% block contentblock%}
+<div class="product-big-title-area">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="product-bit-title text-center">
+          <h2>Sản phẩm</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="single-product-area">
+  <div class="zigzag-bottom"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="product-content-right">
+          <div class="woocommerce">
+            {% if sl_conlai %}
+            <h2 style="text-align: center">Số lượng sản phẩm còn : {{sl_conlai}}</h2>
+            {%else%}
+            <h2 style="text-align: center">Sản phẩm hết hàng</h2>
+            {%endif%} {% if list_sp_outof %}
+            <table cellspacing="0" class="shop_table cart">
+              <thead>
+                <tr>
+                  <th class="product-name">Tên Sản phẩm</th>
+                  <th class="product-quantity">Số lượng còn:</th>
+                  <th class="product-subtotal">Số lượng bạn mua:</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in list_sp_outof %}
+                <tr class="cart_item">
+                  <td class="product-name">
+                    <p>{{i.sp.tensanpham}}</p>
+                  </td>
+                  <td class="product-name">
+                    <p>{{i.sp.soluong}}</p>
+                  </td>
+                  <td class="product-name">
+                    <p>{{i.sl}}</p>
+                  </td>
+                </tr>
+                {%endfor%}
+              </tbody>
+            </table>
+            {%endif%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -95,7 +95,42 @@
                     <!-- <a href="">sale</a>, <a href="">shoes</a>. -->
                   </p>
                 </div>
-
+                <div class="rating-chooser">
+                  <p style="display : inline-block; width:90px;font-size: 18px">Xếp hạng: </p>
+                  <p style="display : inline-block;font-size: 18px">{{rating}}/5</p>
+                  <p>Đánh giá của bạn</p>
+                  <form action="{% url 'sanpham:vote_rating' sanpham.id_sanpham%}" method = "POST"> 
+                    {% csrf_token %} {{form}}
+                     <div class="rating-wrap-post">
+                      <button style="border:none; background-color:transparent;width: 6px;" type="submit" name="1">
+                        {% if rating_user >= 1 %}  <i style="color: #1ABC9C ;"  class="fa fa-star" ></i>
+                        {%else%}
+                        <i style="color: rgb(65, 59, 59);"  class="fa fa-star" ></i>
+                        {%endif%}
+                      </button>
+                      <button style="border:none; background-color:transparent;width: 6px;" type="submit" name="2">
+                        {% if rating_user >= 2 %}  <i style="color: #1ABC9C ;"  class="fa fa-star" ></i>
+                        {%else%}
+                        <i style="color: rgb(65, 59, 59);"  class="fa fa-star" ></i>
+                        {%endif%}</button>
+                      <button style="border:none; background-color:transparent;width: 6px;" type="submit" name="3">
+                        {% if rating_user >= 3 %}  <i style="color: #1ABC9C ;"  class="fa fa-star" ></i>
+                        {%else%}
+                        <i style="color: rgb(65, 59, 59);"  class="fa fa-star" ></i>
+                        {%endif%}</button>
+                      <button style="border:none; background-color:transparent;width: 6px;" type="submit" name="4">
+                        {% if rating_user >= 4 %}  <i style="color: #1ABC9C ;"  class="fa fa-star" ></i>
+                        {%else%}
+                        <i style="color: rgb(65, 59, 59);"  class="fa fa-star" ></i>
+                        {%endif%}</button>
+                      <button style="border:none; background-color:transparent;width: 6px;" type="submit" name="5">
+                        {% if rating_user >= 5 %}  <i style="color: #1ABC9C ;"  class="fa fa-star" ></i>
+                        {%else%}
+                        <i style="color: rgb(65, 59, 59);"  class="fa fa-star" ></i>
+                        {%endif%}</button>
+                    </div>
+                  </form>
+                </div>
                 <div role="tabpanel">
                   <ul class="product-tab" role="tablist">
                     <li role="presentation" class="active">
@@ -113,31 +148,42 @@
                     <div role="tabpanel" class="tab-pane fade" id="profile">
                       <h2>Đánh giá</h2>
                       <div class="submit-review">
-                        <p>
-                          <label for="name">Tên</label>
-                          <input name="name" type="text" />
-                        </p>
-                        <p>
-                          <label for="email">Email</label>
-                          <input name="email" type="email" />
-                        </p>
-                        <div class="rating-chooser">
-                          <p>Đánh giá</p>
+                        <!-- item -->
+                        {% for i in danhgia %}
+                        <div style="border-bottom: 2px solid #1abc9c;margin-bottom: 20px;">
+                          <div>
+                            
+                            {% if i.user.image %}
+                            <img
+                              src="{{i.user.image.url}}"
+                              style="height: 50px; width: 50px; border-radius: 50%; display: inline-block"
 
-                          <div class="rating-wrap-post">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
+                            />
+                            {%else%}
+                            <img
+                              src=""
+                              alt="{{i.user.hoten}}"
+                            />
+                            {%endif%}
+
+                            <p style="display: inline-block; width: 200px; margin-left: 20px; font-weight: 700; font-size: 16px;">
+                              {{i.user.hoten}}
+                            </p>
+                            <p style="display:inline-block; float:right;margin-top:8px ">{{i.ngaydat}}</p>
                           </div>
+                          <p style="margin-left: 74px">{{i.noidung}}</p>
                         </div>
-                        <p>
-                          <label for="review">Góp ý</label>
-                          <textarea name="review" id="" cols="30" rows="10"></textarea>
-                        </p>
-                        <p><input type="submit" value="Submit" /></p>
-                      </div>
+                        {%endfor%}
+                        
+                        <form action="{% url 'sanpham:add_review' sanpham.id_sanpham%}" method ="POST">
+                          {% csrf_token %}{{form}}
+                          <p style="margin-top: 15px">
+                            <label for="review">Góp ý</label>
+                            <textarea name="review" id="" cols="30" rows="10"></textarea>
+                          </pstyle=margin-bottom:>
+                          <p><input type="submit" value="Submit" /></p>
+                        </form>
+                        </div>
                     </div>
                   </div>
                 </div>

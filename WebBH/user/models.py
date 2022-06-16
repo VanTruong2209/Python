@@ -11,4 +11,5 @@ class User(models.Model):
     dienthoai =  models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
     quyen = models.BooleanField(default=True)
+    image = models.ImageField(upload_to='users/', blank=True)
 

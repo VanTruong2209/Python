@@ -1,0 +1,99 @@
+{% extends 'store/base.html'%} {% load static%} {% load humanize %} {% block contentblock%}
+
+<div class="product-big-title-area">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="product-bit-title text-center">
+          <h2>Doanh thu</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="single-product-area">
+  <div class="zigzag-bottom"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="product-content-right">
+          <div class="woocommerce">
+            <form action="{% url 'donhangs:doanhthu' %}" method="post">
+              {%csrf_token%} {{form}}
+              <div style="margin-left: auto; margin-right: auto; width: 550px; margin-bottom: 40px">
+                <p class=" " style="display: inline-block; width: 150px; font-size: 20px">Nhập thời gian:</p>
+
+                <select name="year" id="year" style="font-size: 18px; width: 158px; height: 36px"></select>
+
+                <select name="month" id="month" style="font-size: 18px; width: 158px; height: 36px"></select>
+
+                <!-- <input type="text" name="month" />
+                  <input type="text" name="year" /> -->
+                <input type="submit" value="ok" />
+              </div>
+            </form>
+            {% if year and month%}
+            <p style="text-align: center; font-size: 24px; margin-bottom: 30px; color: #1abc9c">
+              Doanh thu tháng {{month}}, {{year}}
+            </p>
+            {% endif %}
+            <table cellspacing="0" class="shop_table cart">
+              <thead>
+                <tr>
+                  <th class="product-name">Tên Sản phẩm</th>
+
+                  <th class="product-subtotal">Số lượng bán</th>
+                  <th class="product-quantity">Số lượng còn lại</th>
+                  <th class="product-quantity">Doanh thu</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- item -->
+
+                {% for item in list_sp %}
+                <tr>
+                  <td class="product-price">
+                    <span class="amount">{{item.sanpham.tensanpham}}</span>
+                  </td>
+
+                  <td class="product-price">
+                    <span class="amount">{{item.soluongban}}</span>
+                  </td>
+                  <td class="product-price">
+                    <span class="amount">{{item.sanpham.soluong}}</span>
+                  </td>
+                  <td class="product-price">
+                    <span class="amount">{{item.doanhthu|intcomma}} VNĐ</span>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <table cellspacing="0" class="shop_table cart">
+              <thead>
+                <tr>
+                  <th class="product-name">Tổng doanh thu</th>
+                  <th class="product-name">{{doanhthu|intcomma}} VNĐ</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+
+            {% if output %}
+            <div id="myFirstchart-container" style="margin-right: auto; margin-left: auto; width: 700px">
+              {{ output|safe }}
+            </div>
+            {% endif%} {% if output_cot and output_tron %}
+            <div id="myFirstchart-container" style="display: inline-block">{{ output_cot|safe }}</div>
+            <div id="chart-1" style="display: inline-block">{{ output_tron|safe }}</div>
+
+            {% endif%}
+            <!-- dumping JavaScript code here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

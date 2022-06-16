@@ -125,7 +125,37 @@
             </div>
             {% endfor %}
           </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="product-pagination text-center">
+                <nav>
+                  <ul class="pagination">
+                    {% if list_sp.has_previous %}
+                    <li>
+                      <a href="?page={{ list_sp.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                    <li><a href="?page={{ list_sp.previous_page_number }}">{{ list_sp.previous_page_number }}</a></li>
 
+                    {% endif %}
+                    <li><a href="?page={{ list_sp.number }}">{{ list_sp.number }}</a></li>
+
+                    {% if list_sp.has_next %}
+
+                    <li><a href="?page={{ list_sp.next_page_number }}">{{ list_sp.next_page_number }}</a></li>
+                    {% endif %} {% if list_sp.has_next %}
+                    <li>
+                      <a href="?page={{ list_sp.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
           <!-- <div class="related-products-wrapper">
             <h2 class="related-products-title">Related Products</h2>
             <div class="related-products-carousel">

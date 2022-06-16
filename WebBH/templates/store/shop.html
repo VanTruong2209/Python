@@ -54,7 +54,9 @@
             />
           </div>
           <h2>
-            <a href="{% url 'sanpham:detail_product' item.id_sanpham %}">{{item.tensanpham}}</a>
+            <a style="text-transform: uppercase" href="{% url 'sanpham:detail_product' item.id_sanpham %}"
+              >{{item.tensanpham}}</a
+            >
           </h2>
           <div class="product-carousel-price" style="position: absolute; bottom: 12%">
             <ins>{{item.dongia| intcomma}} VNĐ</ins>
@@ -82,21 +84,27 @@
         <div class="product-pagination text-center">
           <nav>
             <ul class="pagination">
+              {% if list_sp.has_previous %}
               <li>
-                <a href="#" aria-label="Previous">
+                <a href="?page={{ list_sp.previous_page_number }}" aria-label="Previous">
                   <span aria-hidden="true">&laquo;</span>
                 </a>
               </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
+              <li><a href="?page={{ list_sp.previous_page_number }}">{{ list_sp.previous_page_number }}</a></li>
+
+              {% endif %}
+              <li><a href="?page={{ list_sp.number }}">{{ list_sp.number }}</a></li>
+
+              {% if list_sp.has_next %}
+
+              <li><a href="?page={{ list_sp.next_page_number }}">{{ list_sp.next_page_number }}</a></li>
+              {% endif %} {% if list_sp.has_next %}
               <li>
-                <a href="#" aria-label="Next">
+                <a href="?page={{ list_sp.next_page_number }}" aria-label="Next">
                   <span aria-hidden="true">&raquo;</span>
                 </a>
               </li>
+              {% endif %}
             </ul>
           </nav>
         </div>

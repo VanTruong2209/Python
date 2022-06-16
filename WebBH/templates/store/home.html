@@ -201,7 +201,7 @@
               </div>
 
               <h2>
-                <a href="single-product.html" style="height: 10px">{{item.tensanpham}}</a>
+                <a href="single-product.html" style="height: 10px; text-transform: uppercase">{{item.tensanpham}}</a>
               </h2>
 
               <div class="product-carousel-price" style="position: absolute; bottom: 0%">
@@ -228,7 +228,7 @@
           <div class="brand-list">
             {% for item in list_brand%}
             <a href="{% url 'sanpham:list_branch' item.id_hang %}"
-              ><img src="{% static item.hinhanh %}" alt="" style="height: 80px; width: 200px"
+              ><img src="{% static item.hinhanh %}" alt="" style="height: 70px; width: 180px"
             /></a>
 
             {% endfor %}

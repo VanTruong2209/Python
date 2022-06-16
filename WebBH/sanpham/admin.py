@@ -4,3 +4,7 @@ from .models import *
 admin.site.register(SanPham)
 admin.site.register(LoaiSanPham)
 admin.site.register(Hang)
+admin.site.register(DanhGia)
+admin.site.register(Rating)
+
+

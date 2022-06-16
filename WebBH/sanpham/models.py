@@ -1,6 +1,7 @@
 import datetime
+from pyexpat import model
 from django.db import models
-
+from user.models import *
 # Create your models here.
 class LoaiSanPham(models.Model):
     id_loaisanpham = models.IntegerField(primary_key=True,null=False)
@@ -30,3 +31,15 @@ class SanPham(models.Model):
 
     def get_hinhanh(self):
         return self.hinhanh
+    
+class DanhGia(models.Model):
+    sanpham = models.ForeignKey(SanPham, on_delete=models.CASCADE,default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,default=1)
+    noidung = models.CharField(max_length=2000,null=True)
+    ngaydat = models.DateField(default=datetime.datetime.now,null=True)
+
+
+class Rating(models.Model):
+    sanpham = models.ForeignKey(SanPham, on_delete=models.CASCADE,default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,default=1)
+    rating = models.IntegerField(default=0)
