@@ -163,8 +163,6 @@ def update_cart(request, list_id):
         return redirect('../')
     else: 
         return render(request,'store/outofproduct.html',{"list_sp_outof":list_sp_outof})
-        
-
 
 def remove_cart(request,id):
     id_donhang = request.session['id_donhang']

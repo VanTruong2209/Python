@@ -18,7 +18,6 @@
           <li><a href="{% url 'sanpham:category' %}">Thể loại</a></li>
 
           <!-- <li><a href="#">Others</a></li> -->
-          <li><a href="#">Liên hệ</a></li>
         </ul>
       </div>
     </div>
@@ -201,7 +200,11 @@
               </div>
 
               <h2>
-                <a href="single-product.html" style="height: 10px; text-transform: uppercase">{{item.tensanpham}}</a>
+                <a
+                  href="{% url 'sanpham:detail_product' item.id_sanpham %}"
+                  style="height: 10px; text-transform: uppercase"
+                  >{{item.tensanpham}}</a
+                >
               </h2>
 
               <div class="product-carousel-price" style="position: absolute; bottom: 0%">
