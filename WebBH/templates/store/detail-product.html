@@ -28,7 +28,6 @@
           <li><a href="{% url 'sanpham:category' %}">Thể loại</a></li>
 
           <!-- <li><a href="#">Others</a></li> -->
-          <li><a href="#">Liên hệ</a></li>
         </ul>
       </div>
     </div>
@@ -156,7 +155,7 @@
                             {% if i.user.image %}
                             <img
                               src="{{i.user.image.url}}"
-                              style="height: 50px; width: 50px; border-radius: 50%; display: inline-block"
+                              style="height: 50px; width: 50px; border-radius: 50%; display: inline-block;object-fit: cover;"
 
                             />
                             {%else%}
