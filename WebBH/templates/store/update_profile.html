@@ -329,7 +329,7 @@
               </div>
             </div>
           </form>
-          <form onsubmit="submitForm(event)" action="{% url 'user:password' request.session.id_user %}" method="post">
+          <form onsubmit="submitForm()"  action="{% url 'user:password' request.session.id_user %}" method="post" >
             {% csrf_token %} {{form}}
             <div class="row gutters">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -349,18 +349,28 @@
                 </div>
               </div>
               <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                
                 <div class="form-group">
-                  <label>Mật khẩu</label>
+                  <label>Mật khẩu hiện tại</label>
                   <input
                     type="password"
                     class="form-control"
-                    name="password"
+                    name="password_cur"
                     required
-                    id ="inputPassword"
+                    value=""
                   />
                 </div>
               </div>
               <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                  <label>Mật khẩu mới</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    name="password_new"
+                    required
+                  />
+                </div>
               </div>
               <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 
@@ -392,6 +402,17 @@
                 </div>
               </div>
             </div>
+            {% if trangthai %}
+            {% if trangthai == 1%}
+            <div  style="font-size: 20px;color:green">Cập nhập mật khẩu thành công!</div>
+            {%endif%}
+            {%endif%}
+
+            {% if trangthai %}
+            {% if trangthai == 2%}
+            <div style="font-size: 20px;color:red">Cập nhập mật khẩu thất bại!</div>
+            {%endif%}
+            {%endif%}
           </form>
           </div>
         </div>
@@ -510,17 +531,18 @@
     <!-- Main Script -->
     <script src="{% static 'js/main.js' %}"></script>
     
-    <script>
+    <!-- <script>
       function submitForm(event){ 
         var pass = document.getElementById("inputPassword").value;
         var confirm1 = document.getElementById("inputConfirm").value;
         console.log(pass,confirm1);
-        
         if(pass !== confirm1)
-        event.preventDefault();
-        alert("Mật khẩu không trùng khớp!")
+        {
+          event.preventDefault();
+          alert("Mật khẩu không trùng khớp!")
+        }
       }
-    </script>1
+    </script> -->
   </body>
 </html>
 
