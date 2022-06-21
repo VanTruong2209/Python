@@ -17,7 +17,6 @@ def shop_page(request):
     
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    # return render(request, 'list.html', {'page_obj': page_obj})
     return render(request,'store/shop.html',{'list_sp':page_obj})
 
 def detail_product(request,id):
@@ -64,7 +63,6 @@ def list_branch_product(request, id):
     dem = []
     for i in list_branch:
         sp = SanPham.objects.filter(hang=i).count()
-        # print(sp)
         obj = {
             'id_hang': i.id_hang,
             'tenhang': i.tenhang,
@@ -79,13 +77,11 @@ def list_branch_product(request, id):
 
 def list_category(request, id):
     list_category = LoaiSanPham.objects.filter(pk=id).first()
-    # print(list_category)
     list_sp = SanPham.objects.filter(loaisanpham=list_category)
     return render(request,'store/shop.html',{'list_sp':list_sp})
 
 def list_category_product(request, id):
     list_category = LoaiSanPham.objects.filter(pk=id).first()
-    # print(list_category)
     list_sp = SanPham.objects.filter(loaisanpham=list_category)
 
     list_category = LoaiSanPham.objects.all()
@@ -93,7 +89,6 @@ def list_category_product(request, id):
     dem = []
     for i in list_branch:
         sp = SanPham.objects.filter(hang=i).count()
-        # print(sp)
         obj = {
             'id_hang': i.id_hang,
             'tenhang': i.tenhang,
@@ -112,14 +107,12 @@ def category(request):
     dem = []
     for i in list_branch:
         sp = SanPham.objects.filter(hang=i).count()
-        # print(sp)
         obj = {
             'id_hang': i.id_hang,
             'tenhang': i.tenhang,
             'dem' : sp
         }
         dem.append(obj)
-    # print(dem)
     # dem : chua hang va dem tung loai san pham
     return render(request,'store/category.html',{'list_category':list_category,'list_branch':dem})
 
@@ -127,11 +120,9 @@ def add_review(request,id):
     sp = SanPham.objects.filter(pk=id).first()
     user = User.objects.filter(pk=request.session['id_user']).first()
     if request.method == "POST":
-        print(1)
 
         noidung = request.POST.get('review')
         print(noidung)
-        print(2)
 
         ngaydat = datetime.datetime.now()
         DanhGia.objects.create(sanpham = sp, user = user, noidung = noidung,ngaydat=ngaydat).save()
